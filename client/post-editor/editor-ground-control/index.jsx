@@ -22,6 +22,7 @@ const Card = require( 'components/card' ),
 	Tooltip = require( 'components/tooltip' ),
 	PostListFetcher = require( 'components/post-list-fetcher' ),
 	stats = require( 'lib/posts/stats' );
+import EditorPublishButton from 'post-editor/editor-publish-button';
 
 export default React.createClass( {
 	displayName: 'EditorGroundControl',
@@ -32,7 +33,6 @@ export default React.createClass( {
 		isSaveBlocked: React.PropTypes.bool,
 		isPublishing: React.PropTypes.bool,
 		isSaving: React.PropTypes.bool,
-		onClose: React.PropTypes.func,
 		onPreview: React.PropTypes.func,
 		onPublish: React.PropTypes.func,
 		onSaveDraft: React.PropTypes.func,
@@ -54,7 +54,6 @@ export default React.createClass( {
 			isSaveBlocked: false,
 			isPublishing: false,
 			isSaving: false,
-			onClose: noop,
 			onPublish: noop,
 			onSaveDraft: noop,
 			post: null,
@@ -140,26 +139,8 @@ export default React.createClass( {
 		return this.translate( 'Preview' );
 	},
 
-	trackPrimaryButton: function() {
-		const postEvents = {
-			update: 'Clicked Update Post Button',
-			schedule: 'Clicked Schedule Post Button',
-			requestReview: 'Clicked Request-Review Post Button',
-			publish: 'Clicked Publish Post Button',
-		};
-		const pageEvents = {
-			update: 'Clicked Update Page Button',
-			schedule: 'Clicked Schedule Page Button',
-			requestReview: 'Clicked Request-Review Page Button',
-			publish: 'Clicked Publish Page Button',
-		};
-		const buttonState = this.getPrimaryButtonState();
-		const eventString = postUtils.isPage( this.props.post ) ? pageEvents[ buttonState ] : postEvents[ buttonState ];
-		stats.recordEvent( eventString );
-		stats.recordEvent( 'Clicked Primary Button' );
-	},
-
 	getPrimaryButtonState: function() {
+		// TODO: This logic is duplicated in the EditorPublishButton component
 		if (
 			postUtils.isPublished( this.props.savedPost ) &&
 			! postUtils.isBackDatedPublished( this.props.savedPost ) &&
@@ -186,17 +167,6 @@ export default React.createClass( {
 		}
 
 		return 'requestReview';
-	},
-
-	getPrimaryButtonLabel: function() {
-		const primaryButtonState = this.getPrimaryButtonState();
-		const buttonLabels = {
-			update: this.translate( 'Update' ),
-			schedule: this.translate( 'Schedule' ),
-			publish: this.translate( 'Publish' ),
-			requestReview: this.translate( 'Submit for Review' ),
-		};
-		return buttonLabels[ primaryButtonState ];
 	},
 
 	getVerificationNoticeLabel: function() {
@@ -320,35 +290,8 @@ export default React.createClass( {
 			! this.props.isSaveBlocked;
 	},
 
-	isPrimaryButtonEnabled: function() {
-		return ! this.props.isPublishing &&
-			! this.props.isSaveBlocked &&
-			this.props.hasContent &&
-			! this.state.needsVerification;
-	},
-
 	toggleAdvancedStatus: function() {
 		this.setState( { showAdvanceStatus: ! this.state.showAdvanceStatus } );
-	},
-
-	onPrimaryButtonClick: function() {
-		this.trackPrimaryButton();
-
-		if ( postUtils.isFutureDated( this.props.post ) ) {
-			return this.props.onSave( 'future' );
-		}
-
-		if ( postUtils.isPublished( this.props.savedPost ) &&
-			! postUtils.isBackDatedPublished( this.props.savedPost )
-		) {
-			return this.props.onSave();
-		}
-
-		if ( siteUtils.userCan( 'publish_posts', this.props.site ) ) {
-			return this.props.onPublish();
-		}
-
-		return this.props.onSave( 'pending' );
 	},
 
 	onSaveButtonClick: function() {
@@ -443,14 +386,11 @@ export default React.createClass( {
 						{ this.getPreviewLabel() }
 					</button>
 					<div className="editor-ground-control__publish-combo">
-						<button
-							className="editor-ground-control__publish-button button is-primary"
-							onClick={ this.onPrimaryButtonClick }
-							disabled={ ! this.isPrimaryButtonEnabled() }
+						<EditorPublishButton
+							{ ...this.props }
+							needsVerification={ this.state.needsVerification }
 							tabIndex={ 5 }
-						>
-							{ this.getPrimaryButtonLabel() }
-						</button>
+						/>
 						{ siteUtils.userCan( 'publish_posts', this.props.site ) &&
 							<button
 								ref="schedulePost"
