@@ -28,12 +28,6 @@ export const EditorPublishButton = React.createClass( {
 
 	mixins: [ PureRenderMixin ],
 
-	getInitialState: function() {
-		return {
-			sidebarOpen: false
-		};
-	},
-
 	trackClick: function() {
 		const postEvents = {
 			update: 'Clicked Update Post Button',
