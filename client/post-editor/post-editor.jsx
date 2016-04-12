@@ -51,6 +51,8 @@ import EditorForbidden from 'post-editor/editor-forbidden';
 import { savePreference } from 'state/preferences/actions';
 import { getPreference } from 'state/preferences/selectors';
 import QueryPreferences from 'components/data/query-preferences';
+import Site from 'my-sites/site';
+import StatusLabel from 'post-editor/editor-status-label';
 
 const messages = {
 	post: {
@@ -331,6 +333,18 @@ const PostEditor = React.createClass( {
 								type={ this.props.type }
 							/>
 							{ this.renderNotice() }
+							<div className="editor__site">
+								<Site
+									site={ site }
+									indicator={ false }
+									homeLink={ true }
+									externalLink={ true }
+								/>
+								<StatusLabel
+									post={ this.state.savedPost }
+									type={ this.props.type }
+								/>
+							</div>
 							<FeaturedImage
 								site={ site }
 								post={ this.state.post }
