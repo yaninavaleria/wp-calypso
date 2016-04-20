@@ -291,7 +291,7 @@ export default React.createClass( {
 			! this.props.isSaveBlocked;
 	},
 
-	canSchedulePost: function() {
+	canPublishPost: function() {
 		return siteUtils.userCan( 'publish_posts', this.props.site );
 	},
 
@@ -403,7 +403,7 @@ export default React.createClass( {
 							isSaveBlocked={ this.props.isSaveBlocked }
 							hasContent={ this.props.hasContent }
 						/>
-						{ this.canSchedulePost() &&
+						{ this.canPublishPost() &&
 							<button
 								ref="schedulePost"
 								className="editor-ground-control__time-button button"
@@ -428,7 +428,7 @@ export default React.createClass( {
 						}
 						{ this.renderDateTooltip() }
 					</div>
-					{ this.canSchedulePost() &&
+					{ this.canPublishPost() &&
 						this.schedulePostPopover()
 					}
 				</div>
