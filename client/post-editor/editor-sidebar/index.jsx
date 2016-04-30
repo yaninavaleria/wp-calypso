@@ -11,7 +11,6 @@ import EditorGroundControl from 'post-editor/editor-ground-control';
 import DraftList from 'my-sites/drafts/draft-list';
 import EditorSidebarHeader from './header';
 import EditorActionBar from 'post-editor/editor-action-bar';
-import EditorNotice from 'post-editor/editor-notice';
 
 export default React.createClass( {
 	displayName: 'EditorSidebar',
@@ -34,10 +33,9 @@ export default React.createClass( {
 		onTrashingPost: PropTypes.func,
 		site: PropTypes.object,
 		type: PropTypes.string,
-		showDrafts: PropTypes.bool,
 		onMoreInfoAboutEmailVerify: React.PropTypes.func,
 		userUtils: React.PropTypes.object,
-		notice: PropTypes.object
+		showDrafts: PropTypes.bool
 	},
 
 	render() {
@@ -63,7 +61,6 @@ export default React.createClass( {
 						site={ this.props.site }
 						type={ this.props.type }
 					/>
-					<EditorNotice { ...this.props.notice } />
 					<EditorGroundControl
 						hasContent={ this.props.hasContent }
 						isDirty={ this.props.isDirty }
