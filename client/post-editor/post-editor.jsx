@@ -217,6 +217,7 @@ const PostEditor = React.createClass( {
 		this.setState( {
 			isEditorInitialized: false
 		} );
+		layoutFocus.set( 'content' );
 	},
 
 	componentWillUpdate( nextProps, nextState ) {
