@@ -5,6 +5,9 @@ var React = require( 'react' ),
 	LinkedStateMixin = require( 'react-addons-linked-state-mixin' ),
 	debug = require( 'debug' )( 'calypso:me:profile' );
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 /**
  * Internal dependencies
  */
@@ -25,9 +28,13 @@ var MeSidebarNavigation = require( 'me/sidebar-navigation' ),
 	eventRecorder = require( 'me/event-recorder' ),
 	Main = require( 'components/main' );
 
-module.exports = React.createClass( {
+import SectionHeader from 'components/section-header';
+import FormToggle from 'components/forms/form-toggle';
+import { setPreference } from 'state/preferences/actions';
+import { getPreference } from 'state/preferences/selectors';
+import QueryPreferences from 'components/data/query-preferences';
 
-	displayName: 'Profile',
+const Profile = React.createClass( {
 
 	mixins: [ formBase, LinkedStateMixin, protectForm.mixin, observe( 'userSettings' ), eventRecorder ],
 
@@ -39,9 +46,16 @@ module.exports = React.createClass( {
 		debug( this.constructor.displayName + ' component is unmounting.' );
 	},
 
+	handleSidebarToggle: function() {
+		if ( ! this.props.sidebarCollapsed ) {
+			this.props.setSidebarCollapsed( true );
+		} else {
+			this.props.setSidebarCollapsed( false );
+		}
+	},
+
 	render: function() {
 		var gravatarProfileLink = 'https://gravatar.com/' + this.props.userSettings.getSetting( 'user_login' );
-
 		return (
 			<Main className="profile">
 				<MeSidebarNavigation />
@@ -123,10 +137,30 @@ module.exports = React.createClass( {
 						</p>
 					</form>
 				</Card>
-
 				<ProfileLinks userProfileLinks={ userProfileLinks } />
-
+				<SectionHeader label={ this.translate( 'User Interface' ) } />
+				<Card>
+					<FormLabel>Collapse Sidebar</FormLabel>
+					<FormToggle
+						checked={ this.props.sidebarCollapsed }
+						onChange={ this.handleSidebarToggle }
+					/>
+				</Card>
 			</Main>
 		);
 	}
 } );
+
+export default connect(
+	( state ) => {
+		return {
+			sidebarCollapsed: getPreference( state, 'sidebar-collapsed' )
+		};
+	},
+	( dispatch ) => {
+		return bindActionCreators( {
+			setPreference,
+			setSidebarCollapsed: setPreference.bind( null, 'sidebar-collapsed' )
+		}, dispatch );
+	}
+)( Profile );
