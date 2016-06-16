@@ -38,11 +38,13 @@ export const setPreference = ( key, value ) => dispatch => {
 		key,
 		value
 	} );
-	const settings = { 
+
+	const settings = {
 		[ USER_SETTING_KEY ]: {
 			[ key ]: value
 		}
 	};
+
 	return wpcom.me().settings().update( JSON.stringify( settings ) )
 	.then( ( data ) => {
 		dispatch( {

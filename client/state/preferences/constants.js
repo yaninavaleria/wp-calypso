@@ -3,5 +3,9 @@ export const DEFAULT_PREFERENCES = {
 	'editor-mode': {
 		schema: { enum: [ null, 'html', 'tinymce' ] },
 		default: null
+	},
+	'sidebar-collapsed': {
+		schema: { enum: [ true ] },
+		default: false
 	}
 };
