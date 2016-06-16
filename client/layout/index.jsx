@@ -37,7 +37,9 @@ var MasterbarLoggedIn = require( 'layout/masterbar/logged-in' ),
 
 import { isOffline } from 'state/application/selectors';
 import { getGuidedTourState } from 'state/ui/guided-tours/selectors';
+import { getPreference } from 'state/preferences/selectors';
 import DesignPreview from 'my-sites/design-preview';
+import QueryPreferences from 'components/data/query-preferences';
 
 if ( config.isEnabled( 'keyboard-shortcuts' ) ) {
 	KeyboardShortcutsMenu = require( 'lib/keyboard-shortcuts/menu' );
@@ -178,7 +180,8 @@ Layout = React.createClass( {
 				`is-section-${this.props.section.name}`,
 				`focus-${this.props.focus.getCurrent()}`,
 				{ 'is-support-user': this.props.isSupportUser },
-				{ 'has-no-sidebar': ! this.props.section.secondary }
+				{ 'has-no-sidebar': ! this.props.section.secondary },
+				{ 'has-collapsed-sidebar': this.props.isSidebarCollapsed }
 			),
 			loadingClass = classnames( {
 				layout__loader: true,
@@ -187,6 +190,7 @@ Layout = React.createClass( {
 
 		return (
 			<div className={ sectionClass }>
+				<QueryPreferences />
 				{ config.isEnabled( 'guided-tours' ) && this.props.tourState.shouldShow ? <GuidedTours /> : null }
 				{ config.isEnabled( 'keyboard-shortcuts' ) ? <KeyboardShortcutsMenu /> : null }
 				{ this.renderMasterbar() }
@@ -220,6 +224,7 @@ export default connect(
 			section,
 			isOffline: isOffline( state ),
 			tourState: getGuidedTourState( state ),
+			isSidebarCollapsed: getPreference( state, 'sidebar-collapsed' )
 		};
 	}
 )( Layout );
