@@ -61,7 +61,8 @@ export default React.createClass( {
 	getInitialState() {
 		return {
 			search: '',
-			highlightedIndex: -1
+			highlightedIndex: -1,
+			showSearch: false
 		};
 	},
 
@@ -76,7 +77,8 @@ export default React.createClass( {
 	onSearch( terms ) {
 		this.setState( {
 			search: terms,
-			highlightedIndex: ( terms ? 0 : -1 )
+			highlightedIndex: ( terms ? 0 : -1 ),
+			showSearch: ( terms ? true : this.state.showSearch ),
 		} );
 	},
 
@@ -337,7 +339,7 @@ export default React.createClass( {
 
 	render() {
 		const selectorClass = classNames( 'site-selector', 'sites-list', {
-			'is-large': true,
+			'is-large': user.get().site_count > 6 || this.state.showSearch,
 			'is-single': user.get().visible_site_count === 1
 		} );
 
