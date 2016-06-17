@@ -61,7 +61,7 @@ export default React.createClass( {
 	getInitialState() {
 		return {
 			search: '',
-			highlightedIndex: 0
+			highlightedIndex: -1
 		};
 	},
 
@@ -76,7 +76,7 @@ export default React.createClass( {
 	onSearch( terms ) {
 		this.setState( {
 			search: terms,
-			highlightedIndex: 0
+			highlightedIndex: ( terms ? 0 : -1 )
 		} );
 	},
 
@@ -87,14 +87,15 @@ export default React.createClass( {
 	},
 
 	scrollToHightlightedSite() {
-		const selectedSite = this.refs.selectedSite;
-		if ( selectedSite ) {
-			const selectedSiteElement = ReactDom.findDOMNode( this.refs.selectedSite );
-			const selectorElement = ReactDom.findDOMNode( this.refs.selector );
-			if ( selectedSiteElement && selectorElement ) {
-				scrollIntoView( selectedSiteElement, selectorElement, {
+		const selectorElement = ReactDom.findDOMNode( this.refs.selector );
+		if ( selectorElement ) {
+			const highlightedSiteElement = ReactDom.findDOMNode( this.refs.highlightedSite );
+			if ( highlightedSiteElement ) {
+				scrollIntoView( highlightedSiteElement, selectorElement, {
 					onlyScrollIfNeeded: true
 				} );
+			} else {
+				selectorElement.scrollTop = 0;
 			}
 		}
 	},
@@ -216,6 +217,15 @@ export default React.createClass( {
 	},
 
 	isSelected( site ) {
+		var selectedSite = this.props.selected || this.props.sites.selected;
+		return (
+			( site === ALL_SITES && selectedSite === null ) ||
+			( selectedSite === site.domain ) ||
+			( selectedSite === site.slug )
+		);
+	},
+
+	isHighlighted( site ) {
 		return this.visibleSites.indexOf( site ) === this.state.highlightedIndex;
 	},
 
@@ -260,14 +270,15 @@ export default React.createClass( {
 		if ( this.props.showAllSites && ! this.state.search && this.props.allSitesPath ) {
 			this.visibleSites.push( ALL_SITES );
 
-			const isSelected = this.isSelected( ALL_SITES );
+			const isHighlighted = this.isHighlighted( ALL_SITES );
 			return(
 				<AllSites
 					key="selector-all-sites"
 					sites={ this.props.sites.get() }
 					onSelect={ this.onAllSitesSelect }
-					isSelected={ isSelected }
-					ref={ isSelected ? 'selectedSite' : null }
+					isHighlighted={ isHighlighted }
+					isSelected={ this.isSelected( ALL_SITES ) }
+					ref={ isHighlighted ? 'highlightedSite' : null }
 				/>
 			);
 		}
@@ -276,15 +287,16 @@ export default React.createClass( {
 	renderSite( site ) {
 		this.visibleSites.push( site );
 
-		const isSelected = this.isSelected( site );
+		const isHighlighted = this.isHighlighted( site );
 		return (
 			<Site
 				site={ site }
 				key={ 'site-' + site.ID }
 				indicator={ this.props.indicator }
 				onSelect={ this.onSiteSelect }
-				isSelected={ isSelected }
-				ref={ isSelected ? 'selectedSite' : null }
+				isHighlighted={ isHighlighted }
+				isSelected={ this.isSelected( site ) }
+				ref={ isHighlighted ? 'highlightedSite' : null }
 			/>
 		);
 	},
