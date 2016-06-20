@@ -34,6 +34,7 @@ import PageViewTracker from 'lib/analytics/page-view-tracker';
 import SearchPreview from 'components/seo/search-preview';
 import config from 'config';
 import { getSeoTitleFormatsForSite } from 'state/sites/selectors';
+import { requirePost } from 'state/wp-api/posts/actions';
 import { getSelectedSite } from 'state/ui/selectors';
 import { toApi as seoTitleToApi } from 'components/seo/meta-title-editor/mappings';
 import { recordTracksEvent } from 'state/analytics/actions';
@@ -315,6 +316,7 @@ export const SeoForm = React.createClass( {
 							}
 						) }
 					</p>
+					<button onClick={ this.props.fetchPost }>Fetch Post</button>
 					<form onChange={ this.markChanged } className="seo-form">
 						<FormFieldset>
 							<FormFieldset className="has-divider">
@@ -459,6 +461,7 @@ export const SeoForm = React.createClass( {
 } );
 
 const mapStateToProps = state => ( {
+	fetchPost: () => dispatch( requirePost( 73244802, 10529 ) ),
 	storedTitleFormats: getSeoTitleFormatsForSite( getSelectedSite( state ) )
 } );
 
