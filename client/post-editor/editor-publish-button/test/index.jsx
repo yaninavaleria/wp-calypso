@@ -17,14 +17,6 @@ import useFakeDom from 'test/helpers/use-fake-dom';
  * Module variables
  */
 
-const MOCK_USER = {
-	email_verified: true
-};
-
-const MOCK_USER_UTILS = {
-	needsVerificationForSite: function ( site ) { return !MOCK_USER.email_verified; }
-};
-
 describe( 'EditorPublishButton', function() {
 	var EditorPublishButton,
 		shallow,
@@ -198,13 +190,20 @@ describe( 'EditorPublishButton', function() {
 
 			expect( tree.isEnabled() ).to.be.true;
 		} );
-		
-		it( 'should return false if form is not publishing and post is not empty, but user is not verified', function() {
-			MOCK_USER.email_verified = false;
-			let tree = shallow( <EditorGroundControl isPublishing={ false } post={ {} } user={ MOCK_USER } userUtils={ MOCK_USER_UTILS } hasContent isDirty isNew /> ).instance();
 
-			expect( tree.isPrimaryButtonEnabled() ).to.be.false;
-			MOCK_USER.email_verified = true;
+		it( 'should return false if form is not publishing and post is not empty, but user is not verified', function() {
+			const tree = shallow(
+				<EditorPublishButton
+					translate={ identity }
+					isPublishing={ false }
+					post={ {} }
+					needsVerification={ true }
+					hasContent
+					isDirty
+					isNew
+				/> ).instance();
+
+			expect( tree.isEnabled() ).to.be.false;
 		} );
 
 		it( 'should return true if form is not publishind and post is new and has content, but is not dirty', function() {
