@@ -26,10 +26,6 @@ const MOCK_USER = {
 	email_verified: true
 };
 
-const MOCK_USER_UTILS = {
-	needsVerificationForSite: function ( site ) { return !MOCK_USER.email_verified; }
-};
-
 describe( 'EditorGroundControl', function() {
 	let shallow, i18n, EditorGroundControl;
 

@@ -18,6 +18,10 @@ export default React.createClass( {
 
 	propTypes: {
 		type: PropTypes.string,
+		text: PropTypes.oneOfType( [
+			PropTypes.oneOfType( [ PropTypes.string, PropTypes.node ] ),
+			PropTypes.arrayOf( PropTypes.oneOfType( [ PropTypes.string, PropTypes.node ] ) )
+		] ),
 		link: PropTypes.string,
 		action: PropTypes.string,
 		layoutFocus: PropTypes.object.isRequired,

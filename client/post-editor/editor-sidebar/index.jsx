@@ -38,54 +38,64 @@ export default React.createClass( {
 		showDrafts: PropTypes.bool
 	},
 
+	renderDraftsList() {
+		return (
+			<DraftList
+				sites={ this.props.sites }
+				onTitleClick={ this.props.onTitleClick }
+				showAllActionsMenu={ false }
+				siteID={ this.props.site ? this.props.site.ID : null }
+				selectedId={ this.props.post ? this.props.post.ID : null }
+			/>
+		)
+	},
+
+	renderSidebar() {
+		return (
+			<div>
+				<EditorActionBar
+					isNew={ this.props.isNew }
+					onTrashingPost={ this.props.onTrashingPost }
+					onPrivatePublish={ this.props.onPublish }
+					post={ this.props.post }
+					savedPost={ this.props.savedPost }
+					site={ this.props.site }
+					type={ this.props.type }
+				/>
+				<EditorGroundControl
+					hasContent={ this.props.hasContent }
+					isDirty={ this.props.isDirty }
+					isSaveBlocked={ this.props.isSaveBlocked }
+					isPublishing={ this.props.isPublishing }
+					isSaving={ this.props.isSaving }
+					onPreview={ this.props.onPreview }
+					onPublish={ this.props.onPublish }
+					onSave={ this.props.onSave }
+					onSaveDraft={ this.props.onSaveDraft }
+					post={ this.props.post }
+					setDate={ this.props.setDate }
+					savedPost={ this.props.savedPost }
+					site={ this.props.site }
+					type={ this.props.type }
+				/>
+				<EditorDrawer
+					site={ this.props.site }
+					post={ this.props.post }
+					postTypes={ this.props.postTypes }
+					isNew={ this.props.isNew }
+					setExcerpt={ this.props.setExcerpt }
+					type={ this.props.type }
+				/>
+			</div>
+		);
+	},
+
 	render() {
 		return (
 			<div className="post-editor__sidebar">
 				<EditorSidebarHeader
 					allPostsUrl={ this.props.allPostsUrl } />
-				{ this.props.showDrafts
-					? <DraftList
-						sites={ this.props.sites }
-						onTitleClick={ this.props.onTitleClick }
-						showAllActionsMenu={ false }
-						siteID={ this.props.site ? this.props.site.ID : null }
-						selectedId={ this.props.post ? this.props.post.ID : null }
-					/>
-					: <div>
-					<EditorActionBar
-						isNew={ this.props.isNew }
-						onTrashingPost={ this.props.onTrashingPost }
-						onPrivatePublish={ this.props.onPublish }
-						post={ this.props.post }
-						savedPost={ this.props.savedPost }
-						site={ this.props.site }
-						type={ this.props.type }
-					/>
-					<EditorGroundControl
-						hasContent={ this.props.hasContent }
-						isDirty={ this.props.isDirty }
-						isSaveBlocked={ this.props.isSaveBlocked }
-						isPublishing={ this.props.isPublishing }
-						isSaving={ this.props.isSaving }
-						onPreview={ this.props.onPreview }
-						onPublish={ this.props.onPublish }
-						onSave={ this.props.onSave }
-						onSaveDraft={ this.props.onSaveDraft }
-						post={ this.props.post }
-						setDate={ this.props.setDate }
-						savedPost={ this.props.savedPost }
-						site={ this.props.site }
-						type={ this.props.type }
-					/>
-					<EditorDrawer
-						site={ this.props.site }
-						post={ this.props.post }
-						postTypes={ this.props.postTypes }
-						isNew={ this.props.isNew }
-						setExcerpt={ this.props.setExcerpt }
-						type={ this.props.type }
-					/>
-				</div> }
+				{ this.props.showDrafts ? this.renderDraftsList() : this.renderSidebar() }
 			</div>
 		);
 	}

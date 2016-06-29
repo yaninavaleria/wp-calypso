@@ -5,8 +5,8 @@ import { expect } from 'chai';
 import moment from 'moment';
 import React from 'react';
 import sinon from 'sinon';
-import TestUtils from 'react-addons-test-utils';
 import identity from 'lodash/identity';
+import { shallow } from 'enzyme';
 
 /**
  * Internal dependencies
@@ -17,22 +17,21 @@ import useFakeDom from 'test/helpers/use-fake-dom';
  * Module variables
  */
 
+const MOCK_SITE = {
+	capabilities: {
+		publish_posts: true
+	},
+	options: {}
+};
+
 describe( 'EditorPublishButton', function() {
-	var EditorPublishButton,
-		shallow,
-		MOCK_SITE = {
-			capabilities: {
-				publish_posts: true
-			},
-			options: {}
-		};
+	let EditorPublishButton;
 
 	useFakeDom();
 
 	this.timeout( 10 * 1000 );
 
 	before( function() {
-		shallow = require( 'enzyme' ).shallow;
 		EditorPublishButton = require( '../' ).EditorPublishButton;
 	} );
 
@@ -63,11 +62,10 @@ describe( 'EditorPublishButton', function() {
 		} );
 
 		it( 'should return Schedule if the post is dated in the future and not scheduled', function() {
-			var now = moment( new Date() ),
-				nextMonth = now.month( now.month() + 1 ).format(),
-				tree;
+			const now = moment( new Date() ),
+				nextMonth = now.month( now.month() + 1 ).format();
 
-			tree = shallow(
+			const tree = shallow(
 				<EditorPublishButton
 					translate={ identity }
 					savedPost={ { status: 'draft' } }
@@ -80,11 +78,10 @@ describe( 'EditorPublishButton', function() {
 		} );
 
 		it( 'should return Schedule if the post is dated in the future and published', function() {
-			var now = moment( new Date() ),
-				nextMonth = now.month( now.month() + 1 ).format(),
-				tree;
+			const now = moment( new Date() ),
+				nextMonth = now.month( now.month() + 1 ).format();
 
-			tree = shallow(
+			const tree = shallow(
 				<EditorPublishButton
 					translate={ identity }
 					savedPost={ { status: 'draft' } }
@@ -97,11 +94,10 @@ describe( 'EditorPublishButton', function() {
 		} );
 
 		it( 'should return Update if the post is scheduled and dated in the future', function() {
-			var now = moment( new Date() ),
-				nextMonth = now.month( now.month() + 1 ).format(),
-				tree;
+			const now = moment( new Date() ),
+				nextMonth = now.month( now.month() + 1 ).format();
 
-			tree = shallow(
+			const tree = shallow(
 				<EditorPublishButton
 					translate={ identity }
 					savedPost={ { status: 'future', date: nextMonth } }
@@ -114,11 +110,10 @@ describe( 'EditorPublishButton', function() {
 		} );
 
 		it( 'should return Update if the post is scheduled, dated in the future, and next status is draft', function() {
-			var now = moment( new Date() ),
-				nextMonth = now.month( now.month() + 1 ).format(),
-				tree;
+			const now = moment( new Date() ),
+				nextMonth = now.month( now.month() + 1 ).format();
 
-			tree = shallow(
+			const tree = shallow(
 				<EditorPublishButton
 					translate={ identity }
 					savedPost={ { status: 'future', date: nextMonth } }
@@ -131,11 +126,10 @@ describe( 'EditorPublishButton', function() {
 		} );
 
 		it( 'should return Publish if the post is scheduled and dated in the past', function() {
-			var now = moment( new Date() ),
-				lastMonth = now.month( now.month() - 1 ).format(),
-				tree;
+			const now = moment( new Date() ),
+				lastMonth = now.month( now.month() - 1 ).format();
 
-			tree = shallow(
+			const tree = shallow(
 				<EditorPublishButton
 					translate={ identity }
 					savedPost={ { status: 'future', date: lastMonth } }
@@ -267,10 +261,9 @@ describe( 'EditorPublishButton', function() {
 
 	describe( '#onClick', function() {
 		it( 'should publish a draft', function() {
-			var onPublish = sinon.spy(),
-				tree;
+			const onPublish = sinon.spy();
 
-			tree = shallow(
+			const tree = shallow(
 				<EditorPublishButton
 					translate={ identity }
 					post={ { status: 'draft' } }
@@ -285,12 +278,11 @@ describe( 'EditorPublishButton', function() {
 		} );
 
 		it( 'should schedule a posted dated in future', function() {
-			var now = moment( new Date() ),
+			const now = moment( new Date() ),
 				nextMonth = now.month( now.month() + 1 ).format(),
-				onSave = sinon.spy(),
-				tree;
+				onSave = sinon.spy();
 
-			tree = shallow(
+			const tree = shallow(
 				<EditorPublishButton
 					translate={ identity }
 					savedPost={ { status: 'draft', date: nextMonth } }
@@ -306,12 +298,11 @@ describe( 'EditorPublishButton', function() {
 		} );
 
 		it( 'should save a scheduled post dated in future', function() {
-			var now = moment( new Date() ),
+			const now = moment( new Date() ),
 				nextMonth = now.month( now.month() + 1 ).format(),
-				onSave = sinon.spy(),
-				tree;
+				onSave = sinon.spy();
 
-			tree = shallow(
+			const tree = shallow(
 				<EditorPublishButton
 					translate={ identity }
 					savedPost={ { status: 'future', date: nextMonth } }
@@ -327,12 +318,11 @@ describe( 'EditorPublishButton', function() {
 		} );
 
 		it( 'should publish a scheduled post dated in past', function() {
-			var now = moment( new Date() ),
+			const now = moment( new Date() ),
 				lastMonth = now.month( now.month() - 1 ).format(),
-				onPublish = sinon.spy(),
-				tree;
+				onPublish = sinon.spy();
 
-			tree = shallow(
+			const tree = shallow(
 				<EditorPublishButton
 					translate={ identity }
 					savedPost={ { status: 'future', date: lastMonth } }
@@ -348,10 +338,9 @@ describe( 'EditorPublishButton', function() {
 		} );
 
 		it( 'should update a published post that has changed status', function() {
-			var onSave = sinon.spy(),
-				tree;
+			const onSave = sinon.spy();
 
-			tree = shallow(
+			const tree = shallow(
 				<EditorPublishButton
 					translate={ identity }
 					savedPost={ { status: 'publish' } }
@@ -367,10 +356,9 @@ describe( 'EditorPublishButton', function() {
 		} );
 
 		it( 'should set status to "pending" if the user can\'t publish', function() {
-			var onSave = sinon.spy(),
-				tree;
+			const onSave = sinon.spy();
 
-			tree = shallow(
+			const tree = shallow(
 				<EditorPublishButton
 					translate={ identity }
 					savedPost={ { status: 'draft' } }

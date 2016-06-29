@@ -252,7 +252,6 @@ const PostEditor = React.createClass( {
 	},
 
 	hideNotice: function( event ) {
-		event && event.preventDefault();
 		this.setState( { notice: {} } );
 	},
 
@@ -695,10 +694,10 @@ const PostEditor = React.createClass( {
 			// to avoid a weird UX we clear the iframe when (auto)saving
 			// so we need to delay opening it a bit to avoid flickering
 			setTimeout( function() {
-				this.setState({ showPreview: true });
+				this.setState( { showPreview: true } );
 			}.bind( this ), 150 );
 		} else {
-			this.setState({ showPreview: true });
+			this.setState( { showPreview: true } );
 		}
 	},
 

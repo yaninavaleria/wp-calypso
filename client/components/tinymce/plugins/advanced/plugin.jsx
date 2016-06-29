@@ -43,9 +43,9 @@ function advanced( editor ) {
 		} );
 
 		if ( editor.theme.panel.getEl().clientHeight ) {
-			tinymce.DOM.setStyles(editor.getContainer(), {
+			tinymce.DOM.setStyles( editor.getContainer(), {
 				'padding-top': containerPadding
-			});
+			} );
 		}
 
 		if ( menuButton ) {
