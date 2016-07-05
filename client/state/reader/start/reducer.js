@@ -5,6 +5,7 @@ import { combineReducers } from 'redux';
 import union from 'lodash/union';
 import find from 'lodash/find';
 import filter from 'lodash/filter';
+import without from 'lodash/without';
 
 /**
  * Internal dependencies
@@ -15,6 +16,8 @@ import {
 	READER_START_RECOMMENDATIONS_REQUEST_SUCCESS,
 	READER_START_RECOMMENDATIONS_REQUEST_FAILURE,
 	READER_START_RECOMMENDATION_INTERACTION,
+	READER_START_RECOMMENDATION_FOLLOW,
+	READER_START_RECOMMENDATION_UNFOLLOW,
 	SERIALIZE,
 	DESERIALIZE,
 } from 'state/action-types';
@@ -85,8 +88,25 @@ export function recommendationsInteractedWith( state = [], action ) {
 	return state;
 }
 
+export function recommendationsFollowed( state = [], action ) {
+	switch ( action.type ) {
+		case READER_START_RECOMMENDATION_FOLLOW:
+			return union( state, [ action.recommendationId ] );
+
+		case READER_START_RECOMMENDATION_UNFOLLOW:
+			return without( state, action.recommendationId );
+
+		case SERIALIZE:
+		case DESERIALIZE:
+			return [];
+	}
+
+	return state;
+}
+
 export default combineReducers( {
 	items,
 	isRequestingRecommendations,
-	recommendationsInteractedWith
+	recommendationsInteractedWith,
+	recommendationsFollowed
 } );

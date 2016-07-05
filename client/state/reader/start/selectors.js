@@ -75,3 +75,13 @@ export function getRecommendationsInteractedWith( state ) {
 export function hasInteractedWithRecommendation( state, recommendationId ) {
 	return includes( state.reader.start.recommendationsInteractedWith, recommendationId );
 }
+
+/**
+ * How many recommendations has the user followed (in this session)?
+ *
+ * @param  {Object}  state  Global state tree
+ * @return {Array} Recommendations
+ */
+export function getRecommendationFollowCount( state ) {
+	return state.reader.start.recommendationsFollowed.length;
+}

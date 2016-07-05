@@ -15,13 +15,15 @@ import {
 	READER_START_RECOMMENDATIONS_RECEIVE,
 	READER_START_RECOMMENDATIONS_REQUEST,
 	READER_START_RECOMMENDATIONS_REQUEST_SUCCESS,
-	READER_SITE_UPDATE
+	READER_SITE_UPDATE,
+	READER_START_RECOMMENDATION_FOLLOW,
+	READER_START_RECOMMENDATION_UNFOLLOW
 } from 'state/action-types';
 
 import { sampleSuccessResponse } from '../sample_responses';
 
 describe( 'actions', () => {
-	let receiveRecommendations, requestRecommendations;
+	let receiveRecommendations, requestRecommendations, recordRecommendationFollow, recordRecommendationUnfollow;
 
 	useMockery( mockery => {
 		mockery.registerMock( 'state/reader/posts/actions', {
@@ -33,6 +35,8 @@ describe( 'actions', () => {
 		const actions = require( '../actions' );
 		receiveRecommendations = actions.receiveRecommendations;
 		requestRecommendations = actions.requestRecommendations;
+		recordRecommendationFollow = actions.recordRecommendationFollow;
+		recordRecommendationUnfollow = actions.recordRecommendationUnfollow;
 	} );
 
 	const spy = sinon.spy();
@@ -80,10 +84,34 @@ describe( 'actions', () => {
 
 				expect( dispatchSpy ).to.have.been.calledWith( {
 					type: READER_SITE_UPDATE,
-					payload: [ sampleSuccessResponse.recommendations[0].meta.data.site ]
+					payload: [ sampleSuccessResponse.recommendations[ 0 ].meta.data.site ]
 				} );
 			} ).catch( ( err ) => {
 				assert.fail( err, undefined, 'errback should not have been called' );
+			} );
+		} );
+	} );
+
+	describe( '#recordRecommendationFollow', () => {
+		it( 'should dispatch an action when a recommendation is followed', () => {
+			const dispatchSpy = sinon.stub();
+			dispatchSpy.withArgs( sinon.match.instanceOf( Promise ) ).returnsArg( 0 );
+			recordRecommendationFollow( 123 )( dispatchSpy );
+			expect( dispatchSpy ).to.have.been.calledWith( {
+				type: READER_START_RECOMMENDATION_FOLLOW,
+				recommendationId: 123
+			} );
+		} );
+	} );
+
+	describe( '#recordRecommendationUnfollow', () => {
+		it( 'should dispatch an action when a recommendation is unfollowed', () => {
+			const dispatchSpy = sinon.stub();
+			dispatchSpy.withArgs( sinon.match.instanceOf( Promise ) ).returnsArg( 0 );
+			recordRecommendationUnfollow( 123 )( dispatchSpy );
+			expect( dispatchSpy ).to.have.been.calledWith( {
+				type: READER_START_RECOMMENDATION_UNFOLLOW,
+				recommendationId: 123
 			} );
 		} );
 	} );
