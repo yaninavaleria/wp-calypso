@@ -145,7 +145,6 @@ const Plans = React.createClass( {
 	},
 
 	storeSelectedPlan( cartItem ) {
-		console.log( ( cartItem ? cartItem.product_slug : 'free' ) );
 		this.props.selectPlanInAdvance( ( cartItem ? cartItem.product_slug : 'free' ), this.props.siteSlug );
 	},
 
@@ -241,7 +240,7 @@ export default connect(
 		};
 	},
 	( dispatch ) => {
-		var methods = Object.assign( {},
+		return Object.assign( {},
 			bindActionCreators( { goBackToWpAdmin, selectPlanInAdvance }, dispatch ),
 //>>>>>>> JPC: Jetpack plans selection first
 			{
@@ -250,7 +249,5 @@ export default connect(
 				}
 			}
 		);
-
-		return methods;
 	}
 )( Plans );
