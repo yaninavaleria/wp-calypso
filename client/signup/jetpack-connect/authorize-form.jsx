@@ -43,6 +43,7 @@ import { isRequestingSites } from 'state/sites/selectors';
 import MainWrapper from './main-wrapper';
 import Plans from './plans';
 import CheckoutData from 'components/data/checkout';
+import abtest from 'lib/abtest';
 
 /**
  * Constants
@@ -549,7 +550,7 @@ export default connect(
 				state.jetpackConnect.jetpackConnectSelectedPlans,
 				state.jetpackConnect.jetpackConnectAuthorize.queryObject.site
 			),
-			plansFirst: true,
+			plansFirst: abtest( 'showPlansBeforeAuth' ),
 			jetpackConnectAuthorize: state.jetpackConnect.jetpackConnectAuthorize,
 			jetpackSSOSessions: state.jetpackConnect.jetpackSSOSessions,
 			jetpackConnectSessions: state.jetpackConnect.jetpackConnectSessions,
