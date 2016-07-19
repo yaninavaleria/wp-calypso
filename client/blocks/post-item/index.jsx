@@ -22,10 +22,11 @@ import PostTypePostAuthor from 'my-sites/post-type-list/post-type-post-author';
  */
 const PLACEHOLDER_POST = { status: 'draft', modified: '2015-08-10T19:44:08+00:00' };
 
-function PostItem( { translate, globalId, post, editUrl, className } ) {
+function PostItem( { translate, globalId, post, editUrl, className, compact } ) {
 	const title = post ? post.title : null;
 	const classes = classnames( 'post-item', className, {
 		'is-untitled': ! title,
+		'is-mini': compact,
 		'is-placeholder': ! globalId
 	} );
 
@@ -54,7 +55,8 @@ PostItem.propTypes = {
 	translate: PropTypes.func,
 	globalId: PropTypes.string,
 	post: PropTypes.object,
-	className: PropTypes.string
+	className: PropTypes.string,
+	compact: PropTypes.bool
 };
 
 export default connect( ( state, ownProps ) => {
