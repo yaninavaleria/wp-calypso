@@ -519,15 +519,6 @@
 	}
 }
 
-.posts.is-single-site .section-nav-tab.is-draft {
-	@include breakpoint( ">1280px" ) {
-		display: none;
-		&.is-selected {
-			display: block;
-		}
-	}
-}
-
 .posts__recent-drafts .no-results {
 	color: $gray;
 	font-size: 14px;
