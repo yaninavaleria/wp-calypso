@@ -2,9 +2,12 @@
  * External dependencies
  */
 import inherits from 'inherits';
-import some from 'lodash/some';
-import includes from 'lodash/includes';
-import find from 'lodash/find';
+import {
+	endsWith,
+	find,
+	includes,
+	some
+} from 'lodash';
 
 /**
  * Internal dependencies
@@ -158,6 +161,18 @@ function hasMappedDomain( domains ) {
 	return getMappedDomains( domains ).length > 0;
 }
 
+function isOpenSrsDomain( domain ) {
+	return domainEndsWithTld( domain, [ '.live' ] );
+}
+
+function isOpenHrsDomain( domain ) {
+	return domainEndsWithTld( domain, [ '.wales' ] );
+}
+
+function domainEndsWithTld( domain, tlds ) {
+	return some( tlds, ( tld ) => endsWith( domain, tld ) );
+}
+
 export {
 	hasGoogleAppsSupportedDomain,
 	canAddGoogleApps,
@@ -173,6 +188,8 @@ export {
 	hasGoogleApps,
 	hasMappedDomain,
 	isInitialized,
+	isOpenHrsDomain,
+	isOpenSrsDomain,
 	isRegisteredDomain,
 	isSubdomain
 };
