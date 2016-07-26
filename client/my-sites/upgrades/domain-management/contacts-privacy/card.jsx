@@ -12,6 +12,7 @@ import Notice from 'components/notice';
 import paths from 'my-sites/upgrades/paths';
 import SectionHeader from 'components/section-header';
 import support from 'lib/url/support';
+import getProtectedContactInformation from 'lib/domains/whois/protected-contact-information';
 
 const ContactsPrivacyCard = React.createClass( {
 	propTypes: {
@@ -27,6 +28,10 @@ const ContactsPrivacyCard = React.createClass( {
 	},
 
 	render() {
+		const contactInformation = this.props.hasPrivacyProtection && this.props.privateDomain
+			? getProtectedContactInformation( this.props.selectedDomainName )
+			: this.props.contactInformation;
+
 		return (
 			<div>
 				<SectionHeader label={ this.translate( 'Domain Contacts' ) } />
@@ -47,7 +52,7 @@ const ContactsPrivacyCard = React.createClass( {
 					{ this.props.currentUserCanManage && this.getNotice() }
 
 					<ContactDisplay
-						contactInformation={ this.props.contactInformation } />
+						contactInformation={ contactInformation } />
 				</CompactCard>
 			</div>
 		);
