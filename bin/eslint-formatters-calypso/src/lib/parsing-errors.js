@@ -16,9 +16,12 @@ module.exports = function( report ) {
 		//
 		// Unlike any other error, thought, its ruleId would be null
 		// and the message received by the parser would be prepended
-		// by the string 'Parsing error:'.
+		// by the string 'Parsing error:'. Also, they would contain
+		// a new key "fatal" with value true.
 
-		if ( message.ruleId === null ) {
+		if ( ( message.ruleId === null ) ||
+		message.message.startsWith( 'Parsing error:' ) ||
+		message.fatal ) {
 			return true;
 		}
 		return false;
