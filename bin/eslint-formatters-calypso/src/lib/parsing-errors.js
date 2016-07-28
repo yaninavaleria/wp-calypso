@@ -8,9 +8,17 @@ module.exports = function( report ) {
 	let newReport = [];
 
 	const isParsingError = ( message ) => {
-		if ( ( message.ruleId === null ) &&
-		( message.severity === 2 ) &&
-		( message.message.startsWith( 'Parsing error:' ) ) ) {
+		// ESLint team have reached the consensus of treating
+		// parsing errors as any other error. See:
+		//
+		// - discussion https://github.com/eslint/eslint/issues/3555
+		// - PR https://github.com/eslint/eslint/pull/3967
+		//
+		// Unlike any other error, thought, its ruleId would be null
+		// and the message received by the parser would be prepended
+		// by the string 'Parsing error:'.
+
+		if ( message.ruleId === null ) {
 			return true;
 		}
 		return false;
