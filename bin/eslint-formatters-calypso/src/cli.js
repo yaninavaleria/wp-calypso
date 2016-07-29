@@ -14,6 +14,6 @@ module.exports = function( report ) {
 
 		return 1;
 	}
-    // it has nothing to show
+	// it has nothing to show
 	return 0;
 };
