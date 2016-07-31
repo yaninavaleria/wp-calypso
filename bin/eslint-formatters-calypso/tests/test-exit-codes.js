@@ -11,8 +11,8 @@ const noErrorsReport = require( './fixtures/eslint-with-no-errors.json' );
 test( 'exit-code - returns 1 when there are errors', t => {
 	t.equals( exitCode( baseReport ), 1 );
 	t.equals( exitCode( linesReport ), 1 );
+	t.equals( exitCode( linesAndRulesReport ), 1 );
 	t.equals( exitCode( parsingErrorsReport ), 1 );
-	t.equals( exitCode( baseReport ), 1 );
 	t.end();
 } );
 
