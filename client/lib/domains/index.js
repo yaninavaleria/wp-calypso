@@ -16,7 +16,9 @@ import wpcom from 'lib/wp';
 import { type as domainTypes } from './constants';
 
 const GOOGLE_APPS_INVALID_TLDS = [ 'in' ],
-	GOOGLE_APPS_BANNED_PHRASES = [ 'google' ];
+	GOOGLE_APPS_BANNED_PHRASES = [ 'google' ],
+	OPENHRS_TLDS = [ '.wales' ],
+	OPENSRS_TLDS = [ '.live' ];
 
 function ValidationError( code ) {
 	this.code = code;
@@ -162,11 +164,11 @@ function hasMappedDomain( domains ) {
 }
 
 function isOpenSrsDomain( domain ) {
-	return domainEndsWithTld( domain, [ '.live' ] );
+	return domainEndsWithTld( domain, OPENSRS_TLDS );
 }
 
 function isOpenHrsDomain( domain ) {
-	return domainEndsWithTld( domain, [ '.wales' ] );
+	return domainEndsWithTld( domain, OPENHRS_TLDS );
 }
 
 function domainEndsWithTld( domain, tlds ) {
