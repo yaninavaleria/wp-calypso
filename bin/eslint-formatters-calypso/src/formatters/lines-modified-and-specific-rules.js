@@ -13,7 +13,7 @@ const config = JSON.parse( fs.readFileSync( '.eslines.json', 'utf-8' ) );
 module.exports = function( report ) {
 	const whatToDiff = process.env.ESLINES_DIFF;
 	let diff;
-	if(whatToDiff === 'index'){
+	if ( whatToDiff === 'index' ) {
 		diff = gitDiffIndex();
 	} else {
 		diff = gitDiffBranchVSMaster();
