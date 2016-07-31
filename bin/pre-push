@@ -41,9 +41,11 @@ do
 	fi
 
 	# PUSH TO TOPIC BRANCH - git push origin topic-branch:topic-branch
-	export ESLINES_BRANCH=$local_ref;
+	export ESLINES_BRANCH=$local_ref
 	./bin/run-lint $(git diff --name-only $(git merge-base $(git rev-parse --abbrev-ref $local_ref) origin/master)..HEAD server/ client/)
 	linter_exit_code=`echo $?` # take exit code from run-lint script
+	unset ESLINES_BRANCH
+
 	if [ ! 0 = "$linter_exit_code" ]
 	then
 		echo "\n\033[41mPUSH ABORTED:\033[0m the linter reported some problems. If you are aware of them and it is OK, you can repeat the command with --no-verify to avoid this check.\n"
