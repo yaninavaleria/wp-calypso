@@ -95,7 +95,7 @@ const PostsMain = React.createClass( {
 			return null;
 		}
 
-		return <PostItem mini key={ draft.global_ID } globalId={ draft.global_ID } />;
+		return <PostItem compact key={ draft.global_ID } globalId={ draft.global_ID } />;
 	},
 
 	render() {
