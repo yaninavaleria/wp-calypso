@@ -18,7 +18,7 @@ import notices from 'notices';
 import QueryPosts from 'components/data/query-posts';
 import QueryPostCounts from 'components/data/query-post-counts';
 import Draft from 'my-sites/draft';
-import PostTypeItem from 'my-sites/post-type-list/post';
+import PostItem from 'blocks/post-item';
 import { getSelectedSiteId } from 'state/ui/selectors';
 import {
 	getSitePostsForQueryIgnoringPage,
@@ -95,7 +95,7 @@ const PostsMain = React.createClass( {
 			return null;
 		}
 
-		return <PostTypeItem mini key={ draft.global_ID } globalId={ draft.global_ID } />;
+		return <PostItem mini key={ draft.global_ID } globalId={ draft.global_ID } />;
 	},
 
 	render() {
