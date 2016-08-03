@@ -297,6 +297,8 @@ export default React.createClass( {
 			'is-single': user.get().visible_site_count === 1
 		} );
 
+		const hiddenSitesCount = user.get().site_count - user.get().visible_site_count;
+
 		return (
 			<PreferencesData>
 				<div className={ selectorClass }>
@@ -311,6 +313,23 @@ export default React.createClass( {
 						{ this.renderAllSites() }
 						{ this.renderStarredSites() }
 						{ this.renderSites() }
+						{ hiddenSitesCount > 0 &&
+							<span className="site-selector__hidden-sites-message">
+								{ this.translate(
+									'%(hiddenSitesCount)d more hidden site.{{br/}} Use search to access it.',
+									'%(hiddenSitesCount)d more hidden sites.{{br/}} Use search to access them.',
+									{
+										count: hiddenSitesCount,
+										args: {
+											hiddenSitesCount: hiddenSitesCount
+										},
+										components: {
+											br: <br />
+										}
+									}
+								) }
+							</span>
+						}
 					</div>
 					{ this.props.showAddNewSite && this.addNewSite() }
 				</div>
