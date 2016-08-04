@@ -559,7 +559,7 @@ export default connect(
 				state.jetpackConnect.jetpackConnectSelectedPlans,
 				state.jetpackConnect.jetpackConnectAuthorize.queryObject.site
 			),
-			plansFirst: abtest( 'jetpackConnectPlansFirst' ),
+			plansFirst: abtest( 'jetpackConnectPlansFirst' ) === 'showPlansBeforeAuth',
 			jetpackConnectAuthorize: state.jetpackConnect.jetpackConnectAuthorize,
 			jetpackSSOSessions: state.jetpackConnect.jetpackSSOSessions,
 			jetpackConnectSessions: state.jetpackConnect.jetpackConnectSessions,
