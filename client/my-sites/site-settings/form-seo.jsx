@@ -103,8 +103,8 @@ export const SeoForm = React.createClass( {
 	getInitialState() {
 		return {
 			...stateForSite( this.props.site ),
-			seoTitleFormats: {},
-			isRefreshingSiteData: false,
+			seoTitleFormats: this.props.storedTitleFormats,
+			isRefreshingSiteData: true,
 			dirtyFields: Set()
 		};
 	},
@@ -118,7 +118,7 @@ export const SeoForm = React.createClass( {
 
 		let nextState = {
 			...stateForSite( nextProps.site ),
-			seoTitleFormats: nextProps.storedTitleFormats
+			seoTitleFormats: nextProps.storedTitleFormats,
 		};
 
 		// Don't update state for fields the user has edited
@@ -139,7 +139,7 @@ export const SeoForm = React.createClass( {
 
 		this.setState( {
 			...nextState,
-			isRefreshingSiteData
+			isRefreshingSiteData,
 		} );
 	},
 
@@ -227,7 +227,7 @@ export const SeoForm = React.createClass( {
 
 		this.setState( {
 			isSubmittingForm: true,
-			isRefreshingSiteData: dirtyFields.has( 'seoTitleFormats' ),
+			isRefreshingSiteData: dirtyFields.has( 'seoTitleFormats' )
 		} );
 
 		// We need to be careful here and only
@@ -313,6 +313,7 @@ export const SeoForm = React.createClass( {
 		const {
 			isSubmittingForm,
 			isFetchingSettings,
+			isRefreshingSiteData,
 			seoMetaDescription,
 			showPasteError = false,
 			hasHtmlTagError = false,
@@ -422,7 +423,11 @@ export const SeoForm = React.createClass( {
 									'results, and when shared on social media sites.'
 								) }
 								</p>
-								<MetaTitleEditor onChange={ this.updateTitleFormats } />
+								<MetaTitleEditor
+									disabled={ isRefreshingSiteData || isDisabled }
+									onChange={ this.updateTitleFormats }
+									titleFormats={ this.state.seoTitleFormats }
+								/>
 							</Card>
 						</div>
 					}
@@ -567,6 +572,7 @@ export const SeoForm = React.createClass( {
 
 const mapStateToProps = ( state, ownProps ) => {
 	const { site } = ownProps;
+	storedTitleFormats: getSeoTitleFormatsForSite( getSelectedSite( state ) ),
 	const isAdvancedSeoEligible = site && site.plan && hasBusinessPlan( site.plan );
 
 	return {
@@ -579,7 +585,7 @@ const mapStateToProps = ( state, ownProps ) => {
 
 const mapDispatchToProps = {
 	refreshSiteData: siteId => requestSite( siteId ),
-	trackSubmission: () => recordTracksEvent( 'calypso_seo_settings_form_submit', {} )
+	trackSubmission: () => recordTracksEvent( 'calypso_seo_settings_form_submit', {} ),
 };
 
 export default connect(
