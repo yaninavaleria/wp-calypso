@@ -33,9 +33,7 @@ const Plans = React.createClass( {
 
 	propTypes: {
 		cart: React.PropTypes.object.isRequired,
-		context: React.PropTypes.object.isRequired,
 		destinationType: React.PropTypes.string,
-		sites: React.PropTypes.object.isRequired,
 		sitePlans: React.PropTypes.object.isRequired,
 		showJetpackFreePlan: React.PropTypes.bool
 	},
@@ -110,7 +108,8 @@ const Plans = React.createClass( {
 					return this.selectPlan( plan );
 				}
 			}
-			if ( this.props.jetpackConnectSelectedPlans[ selectedSiteSlug ] === 'free' ) {
+			if ( this.props.jetpackConnectSelectedPlans[ selectedSiteSlug ] === 'free' ||
+				this.props.jetpackConnectSelectedPlans[ selectedSiteSlug ] === 'jetpack_free' ) {
 				this.selectFreeJetpackPlan();
 			}
 		}
@@ -188,25 +187,23 @@ const Plans = React.createClass( {
 			return null;
 		}
 
-		const jetpackPlans = this.props.plans.get().filter( ( plan ) => {
-			return plan.product_type === 'jetpack';
-		} );
-
 		const defaultJetpackSite = { jetpack: true, plan: {}, isUpgradeable: () => true };
-
 		return (
 			<div>
 				<Main wideLayout>
 					<QueryPlans />
-					<QuerySitePlans siteId={ this.props.selectedSite.ID } />
+					{ this.props.selectedSite
+						? <QuerySitePlans siteId={ this.props.selectedSite.ID } />
+						: null
+					}
 					<div id="plans" className="jetpack-connect__plans-list plans has-sidebar">
 						{ this.renderConnectHeader() }
 
 						<div id="plans" className="plans has-sidebar">
 							<PlansFeaturesMain
-								site={ this.props.selectedSite }
+								site={ this.props.selectedSite || defaultJetpackSite }
 								isInSignup={ true }
-								onUpgradeClick={ this.selectPlan }
+								onUpgradeClick={ this.props.showFirst ? this.storeSelectedPlan : this.selectPlan }
 								intervalType="yearly"
 								onSelectPlan={ this.props.showFirst ? this.storeSelectedPlan : this.selectPlan }
 								onSelectFreeJetpackPlan={ this.props.showFirst ? this.storeSelectedPlan : this.selectFreeJetpackPlan }
@@ -243,7 +240,7 @@ export default connect(
 	},
 	( dispatch ) => {
 		return Object.assign( {},
-			bindActionCreators( { goBackToWpAdmin, requestPlans, selectPlanInAdvance}, dispatch ),
+			bindActionCreators( { goBackToWpAdmin, requestPlans, selectPlanInAdvance }, dispatch ),
 			{
 				recordTracksEvent( eventName, props ) {
 					dispatch( recordTracksEvent( eventName, props ) );
