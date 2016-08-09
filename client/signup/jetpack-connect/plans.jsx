@@ -29,7 +29,7 @@ import { isRequestingPlans, getPlanBySlug } from 'state/plans/selectors';
 const CALYPSO_REDIRECTION_PAGE = '/posts/';
 
 const Plans = React.createClass( {
-	mixins: [ observe( 'sites', 'plans' ) ],
+	mixins: [ observe( 'sites' ) ],
 
 	propTypes: {
 		cart: React.PropTypes.object.isRequired,
@@ -94,7 +94,7 @@ const Plans = React.createClass( {
 			if ( this.props.flowType === 'pro' ||
 				this.props.jetpackConnectSelectedPlans[ selectedSiteSlug ] === 'jetpack_business' ) {
 				this.props.requestPlans();
-				const plan = this.props.plans.getPlanBySlug( 'jetpack_business' );
+				const plan = this.props.getPlanBySlug( 'jetpack_business' );
 				if ( plan ) {
 					return this.selectPlan( plan );
 				}
@@ -103,7 +103,7 @@ const Plans = React.createClass( {
 				this.props.jetpackConnectSelectedPlans[ selectedSiteSlug ] === 'jetpack_premium'
 			) {
 				this.props.requestPlans();
-				const plan = this.props.plans.getPlanBySlug( 'jetpack_premium' );
+				const plan = this.props.getPlanBySlug( 'jetpack_premium' );
 				if ( plan ) {
 					return this.selectPlan( plan );
 				}
