@@ -13,6 +13,7 @@ import paths from 'my-sites/upgrades/paths';
 import SectionHeader from 'components/section-header';
 import support from 'lib/url/support';
 import getProtectedContactInformation from 'lib/domains/whois/protected-contact-information';
+import { isOpenHrsDomain, isOpenSrsDomain } from 'lib/domains';
 
 const ContactsPrivacyCard = React.createClass( {
 	propTypes: {
@@ -28,9 +29,10 @@ const ContactsPrivacyCard = React.createClass( {
 	},
 
 	render() {
-		const contactInformation = this.props.hasPrivacyProtection && this.props.privateDomain
-			? getProtectedContactInformation( this.props.selectedDomainName )
-			: this.props.contactInformation;
+		const { hasPrivacyProtection, privateDomain, selectedDomainName: domainName } = this.props,
+			contactInformation = hasPrivacyProtection && privateDomain && ( isOpenSrsDomain( domainName ) || isOpenHrsDomain( domainName ) )
+				? getProtectedContactInformation( domainName )
+				: this.props.contactInformation;
 
 		return (
 			<div>
