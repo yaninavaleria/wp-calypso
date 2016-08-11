@@ -19,7 +19,9 @@ import {
 	previewIsNotShowing,
 	previewIsShowing,
 } from 'state/ui/guided-tours/contexts';
+import { getScrollableSidebar } from 'layout/guided-tours/positioning';
 import Gridicon from 'components/gridicon';
+import scrollTo from 'lib/scroll-to';
 
 export const MainTour = makeTour(
 	<Tour name="main" version="20160601" path="/" when={ and( isNewUser, isEnabled( 'guided-tours/main' ) ) }>
@@ -169,6 +171,7 @@ export const MainTour = makeTour(
 			when={ selectedSiteIsCustomizable }
 			scrollContainer=".sidebar__region"
 			next="finish"
+			shouldScrollTo
 		>
 			<p className="guided-tours__step-text">
 				{
@@ -201,7 +204,7 @@ export const MainTour = makeTour(
 				}
 			</p>
 			<div className="guided-tours__single-button-row">
-				<Quit primary>{ translate( "We're all done!" ) }</Quit>
+				<Quit onClick={ () => scrollTo( { y: 0, container: getScrollableSidebar() } ) } primary> { translate( "We're all done!" ) }</Quit>
 			</div>
 			<Link href="https://lean.wordpress.com">
 				{ translate( 'Learn more about WordPress.com' ) }
