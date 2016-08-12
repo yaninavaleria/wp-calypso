@@ -109,6 +109,12 @@ export class Step extends Component {
 		this.skipIfInvalidContext( nextProps, nextContext );
 	}
 
+	componentWillUnmount() {
+		if ( this.props.isLastStep ) {
+			this.context.quit( { finished: true } );
+		}
+	}
+
 	skipIfInvalidContext( props, context ) {
 		const { when, next } = props;
 		if ( when && ! context.isValid( when ) ) {
