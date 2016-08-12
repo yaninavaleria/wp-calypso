@@ -8,6 +8,7 @@ import { localize } from 'i18n-calypso';
 /**
  * Internal dependencies
  */
+import { tracks } from 'lib/analytics';
 import AllTours from 'layout/guided-tours/config';
 import QueryPreferences from 'components/data/query-preferences';
 import RootChild from 'components/root-child';
@@ -25,26 +26,35 @@ class GuidedTours extends Component {
 		return this.props.tourState !== nextProps.tourState;
 	}
 
-	next = ( tour, nextStepName ) => {
+	next = ( { tour, tourVersion, nextStepName, doNotTrack = false } ) => {
+		console.log( tour, tourVersion, nextStepName, doNotTrack );
+		if ( ! doNotTrack ) {
+			tracks.recordEvent( 'calypso_guided_tours_next', {
+				tour,
+				step: nextStepName,
+				tour_version: tourVersion,
+			} );
+		}
+
 		this.props.nextGuidedTourStep( {
 			stepName: nextStepName,
 			tour: tour,
 		} );
 	}
 
-	quit = ( options = {} ) => {
+	quit = ( { step, tour, tourVersion, isLastStep } ) => {
 		// TODO: put into step specific callback?
 		const sidebar = getScrollableSidebar();
 		scrollTo( { y: 0, container: sidebar } );
+		console.log( 'quit', tour, tourVersion, step, isLastStep );
 
-		this.props.quitGuidedTour( Object.assign( {
-			stepName: this.props.tourState.stepName,
-			tour: this.props.tourState.tour,
-		}, options ) );
-	}
+		tracks.recordEvent( `calypso_guided_tours_${ isLastStep ? 'finished' : 'quit' }`, {
+			step,
+			tour,
+			tour_version: tourVersion,
+		} );
 
-	finish = () => {
-		this.quit( { finished: true } );
+		this.props.quitGuidedTour( { tour, stepName: this.props.tourState.stepName, finished: isLastStep } );
 	}
 
 	render() {

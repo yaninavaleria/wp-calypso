@@ -28,6 +28,7 @@ const contextTypes = Object.freeze( {
 	next: PropTypes.func.isRequired,
 	quit: PropTypes.func.isRequired,
 	isValid: PropTypes.func.isRequired,
+	isLastStep: PropTypes.bool.isRequired,
 	tour: PropTypes.string.isRequired,
 	tourVersion: PropTypes.string.isRequired,
 	step: PropTypes.string.isRequired,
@@ -44,8 +45,8 @@ export class Tour extends Component {
 	static childContextTypes = contextTypes;
 
 	getChildContext() {
-		const { next, quit, isValid, tour, tourVersion, step } = this.tourMeta;
-		return { next, quit, isValid, tour, tourVersion, step };
+		const { next, quit, isValid, tour, tourVersion, step, isLastStep } = this.tourMeta;
+		return { next, quit, isValid, tour, tourVersion, step, isLastStep };
 	}
 
 	constructor( props, context ) {
@@ -59,20 +60,36 @@ export class Tour extends Component {
 
 	setTourMeta( props ) {
 		const { next, quit, isValid, name, version, stepName } = props;
-		this.tourMeta = { next, quit, isValid, tour: name, tourVersion: version, step: stepName };
+		this.tourMeta = {
+			next,
+			quit,
+			isValid,
+			tour: name,
+			tourVersion: version,
+			step: stepName,
+			isLastStep: this.isLastStep( props )
+		};
+	}
+
+	findNextStep( props ) {
+		const { children, stepName } = props;
+		return find( children, stepComponent =>
+			stepComponent.props.name === stepName );
+	}
+
+	isLastStep( props ) {
+		const children = props.children;
+		return this.findNextStep( props ) === children[ children.length - 1 ];
 	}
 
 	render() {
-		const { children, stepName } = this.props;
-		const nextStep = find( children, stepComponent =>
-			stepComponent.props.name === stepName );
-		const isLastStep = nextStep === children[ children.length - 1 ];
+		const nextStep = this.findNextStep( this.props );
 
 		if ( ! nextStep ) {
 			return null;
 		}
 
-		return React.cloneElement( nextStep, { isLastStep } );
+		return React.cloneElement( nextStep );
 	}
 }
 
@@ -109,10 +126,20 @@ export class Step extends Component {
 		this.skipIfInvalidContext( nextProps, nextContext );
 	}
 
+	componentWillUnmount() {
+		const { quit, step, tour, tourVersion, isLastStep } = this.context;
+
+		if ( isLastStep ) {
+			quit( { step, tour, tour_version: tourVersion, isLastStep } );
+		}
+	}
+
 	skipIfInvalidContext( props, context ) {
 		const { when, next } = props;
-		if ( when && ! context.isValid( when ) ) {
-			this.context.next( this.tour, next ); //TODO(ehg): use future branching code get next step
+		const { isValid, tour, tourVersion } = context;
+		if ( when && ! isValid( when ) ) {
+			//TODO(ehg): use future branching code get next step
+			this.context.next( { tour, tourVersion, nextStepName: next, doNotTrack: true } );
 		}
 	}
 
@@ -160,7 +187,9 @@ export class Next extends Component {
 	}
 
 	onClick = () => {
-		this.context.next( this.context.tour, this.props.step );
+		const { tour, tourVersion } = this.context;
+		const { step: nextStepName } = this.props;
+		this.context.next( { tour, tourVersion, nextStepName } );
 	}
 
 	render() {
@@ -186,7 +215,8 @@ export class Quit extends Component {
 	}
 
 	onClick = () => {
-		this.context.quit();
+		const { tour, tourVersion, step, isLastStep } = this.context;
+		this.context.next( { tour, tourVersion, step, isLastStep } );
 	}
 
 	render() {
@@ -237,7 +267,9 @@ export class Continue extends Component {
 	}
 
 	onContinue = () => {
-		this.context.next( this.context.tour, this.props.step );
+		const { tour, tourVersion } = this.context;
+		const { step: nextStepName } = this.props;
+		this.context.next( { tour, tourVersion, nextStepName } );
 	}
 
 	addTargetListener() {
