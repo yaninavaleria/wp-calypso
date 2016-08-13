@@ -6,6 +6,31 @@ sha40=0000000000000000000000000000000000000000
 
 echo "\nBy contributing to this project, you license the materials you contribute under the GNU General Public License v2 (or later). All materials must have GPLv2 compatible licenses — see .github/CONTRIBUTING.md for details.\n\n"
 
+# We want to know whether this script was called from the CLI or from a GUI app.
+# If it is the later, we would only show the ESLint command to get the report,
+# not the report itself, because GUIs tend to left a small space for pre-commit
+# messages and they are not useful. At least this way, the user can see something.
+#
+# - First, get the caller: the process that executes the commit.
+#	The command tree would be: caller > git > pre-commit script
+#       so we need to get the grandparent of this script
+#
+# - Second, if the caller is not one of the available shells (see /etc/shells),
+#	we are going to assume that it is called from a GUI app.
+
+# caller=$(which $(ps -o comm=  $(ps -o ppid= $(ps -o ppid= $$))))
+caller=$(which $(ps -o comm=  $(ps -o ppid= $PPID)))
+
+is_cli=false
+while read -r line;
+do
+	if [ "$line" = "$caller" ]
+	then
+		is_cli=true
+		break
+	fi
+done < /etc/shells
+
 while read local_ref local_sha remote_ref remote_sha
 do
 	# echo "l_ref $local_ref l_sha $local_sha r_ref $remote_ref r_sha $remote_sha"
@@ -30,27 +55,52 @@ do
 		echo "\n\033[41mPUSH ABORTED:\033[0m you are about to PUSH to remote master. If that is what you intended, repeat the command with --no-verify to avoid this check.\n"
 
 		echo "Running the linter in the whole codebase. This may take a while."
-		./bin/run-lint .
-		linter_exit_code=`echo $?` # take exit code from run-lint script
+		if $is_cli
+		then
+			./bin/run-lint . # show full coloured ouput
+			linter_exit_code=`echo $?` # take exit code from run-lint script
+		else
+			./bin/run-lint . > /dev/null 2>&1 # do not show output
+			linter_exit_code=`echo $?` # take exit code from run-lint script
+		fi
 		if [ ! 0 = "$linter_exit_code" ]
 		then
-			echo "\nThe linter has reported some parsing errors in the code you intended to push. Please, resolve them before pushing to master.\n"
+			echo "\nThe linter has reported some PARSING ERRORS in the code you intended to push. Please, resolve them before pushing to master.\n"
+			echo "\nYou may execute the linter again by running: ./bin/run-lint ."
 		fi
 
 		exit 1 # push would not be executed
 	fi
 
 	# PUSH TO TOPIC BRANCH - git push origin topic-branch:topic-branch
-	export ESLINES_BRANCH=$local_ref
-	./bin/run-lint $(git diff --name-only $(git merge-base $(git rev-parse --abbrev-ref $local_ref) origin/master)..HEAD server/ client/)
-	linter_exit_code=`echo $?` # take exit code from run-lint script
-	unset ESLINES_BRANCH
-
-	if [ ! 0 = "$linter_exit_code" ]
+	if $is_cli
 	then
-		echo "\n\033[41mPUSH ABORTED:\033[0m the linter reported some problems. If you are aware of them and it is OK, you can repeat the command with --no-verify to avoid this check.\n"
+		export ESLINES_BRANCH=$local_ref
+		./bin/run-lint $(git diff --name-only $(git merge-base $(git rev-parse --abbrev-ref $local_ref) origin/master)..HEAD server/ client/)
+		linter_exit_code=`echo $?` # take exit code from run-lint script
+		unset ESLINES_BRANCH
+		if [ ! 0 = "$linter_exit_code" ]
+		then
+			echo "\n\033[41mPUSH ABORTED:\033[0m the linter reported some problems. If you are aware of them and it is OK, you can repeat the command with --no-verify to avoid this check.\n"
+		fi
+		exit $linter_exit_code
+	else
+		export ESLINES_BRANCH=$local_ref
+		./bin/run-lint $(git diff --name-only $(git merge-base $(git rev-parse --abbrev-ref $local_ref) origin/master)..HEAD server/ client/) > /dev/null 2>&1 # do not show output
+		linter_exit_code=`echo $?` # take exit code from run-lint script
+		unset ESLINES_BRANCH
+		if [ ! 0 = "$linter_exit_code" ]
+		then
+			echo "\nPUSH ABORTED by linting errors. To see them, run:"
+			echo "\n\n" # some editors only do 1 newline - sigh
+			echo "export ESLINES_BRANCH=$local_ref; ./bin/run-lint \$(git diff --name-only \$(git merge-base \$(git rev-parse --abbrev-ref $local_ref) origin/master)..HEAD server/ client/)"
+			echo "\n\n"
+			echo "If you are aware of the linting errors and it is OK, you can avoid this check by executing:"
+			echo "\n\n"
+			echo "git push <origin> <topic-branch>:<remote-topic-branch> --no-verify"
+		fi
+		exit $linter_exit_code
 	fi
-	exit $linter_exit_code
 
 done
 

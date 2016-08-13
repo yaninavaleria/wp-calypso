@@ -2,12 +2,56 @@
 
 printf "\nBy contributing to this project, you license the materials you contribute under the GNU General Public License v2 (or later). All materials must have GPLv2 compatible licenses — see .github/CONTRIBUTING.md for details.\n\n"
 
-export ESLINES_DIFF='index'; ./bin/run-lint $(git diff --cached --name-only )
-linter_exit_code=`echo $?` # take exit code from run-lint script
-unset ESLINES_DIFF
+# We want to know whether this script was called from the CLI or from a GUI app.
+# If it is the later, we would only show the ESLint command to get the report,
+# not the report itself, because GUIs tend to left a small space for pre-commit
+# messages and they are not useful. At least this way, the user can see something.
+#
+# - First, get the caller: the process that executes the commit.
+#	The command tree would be: caller > git > pre-commit script
+#       so we need to get the grandparent of this script
+#
+# - Second, if the caller is not one of the available shells (see /etc/shells),
+#	we are going to assume that it is called from a GUI app.
 
-if [ ! 0 = "$linter_exit_code" ]
+# caller=$(which $(ps -o comm=  $(ps -o ppid= $(ps -o ppid= $$))))
+caller=$(which $(ps -o comm=  $(ps -o ppid= $PPID)))
+
+is_cli=false
+while read -r line;
+do
+	if [ "$line" = "$caller" ]
+	then
+		is_cli=true
+		break
+	fi
+done < /etc/shells
+
+if $is_cli
 then
-	echo "\n\033[41mCOMMIT ABORTED:\033[0m the linter reported some problems. If you are aware of them and it is OK, you can repeat the command with --no-verify to avoid this check.\n"
+	export ESLINES_DIFF='index' # tell eslines to take contents from index
+	./bin/run-lint $(git diff --cached --name-only ) # show coloured output
+	linter_exit_code=`echo $?` # take exit code from run-lint script
+	unset ESLINES_DIFF
+	if [ ! 0 = "$linter_exit_code" ]
+	then
+		echo "\n\033[41mCOMMIT ABORTED:\033[0m the linter reported some problems. If you are aware of them and it is OK, you can repeat the command with --no-verify to avoid this check.\n"
+	fi
+else
+	export ESLINES_DIFF='index' # tell eslines to take contents from index
+	./bin/run-lint $(git diff --cached --name-only ) > /dev/null 2>&1 # do not show output
+	linter_exit_code=`echo $?` # take exit code from run-lint script
+	unset ESLINES_DIFF
+	if [ ! 0 = "$linter_exit_code" ]
+	then
+		echo "\nCOMMIT ABORTED by linting errors. To see them, run:"
+		echo "\n\n" # some editors only do 1 newline - sigh
+		echo "export ESLINES_DIFF='index'; ./bin/run-lint \$(git diff --cached --name-only ); unset ESLINES_DIFF"
+		echo "\n\n"
+		echo "If you are aware of the linting errors and it is OK, you can avoid this check by executing:"
+		echo "\n\n"
+		echo "git commit --no-verify"
+	fi
 fi
+
 exit $linter_exit_code
