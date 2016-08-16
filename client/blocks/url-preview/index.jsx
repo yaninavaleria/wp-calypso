@@ -8,7 +8,7 @@ import debugFactory from 'debug';
 /**
  * Internal dependencies
  */
-import { clearPreviewUrl } from 'state/ui/preview/actions';
+import { clearPreviewUrl, resetPreviewType } from 'state/ui/preview/actions';
 import { getSelectedSite, getSelectedSiteId } from 'state/ui/selectors';
 import { getPreviewUrl } from 'state/ui/preview/selectors';
 import { getSiteOption } from 'state/sites/selectors';
@@ -42,6 +42,7 @@ export default function urlPreview( WebPreview ) {
 
 		onClosePreview() {
 			this.props.clearPreviewUrl( this.props.selectedSiteId );
+			this.props.resetPreviewType();
 			this.props.setLayoutFocus( 'sidebar' );
 		}
 
@@ -92,6 +93,7 @@ export default function urlPreview( WebPreview ) {
 		selectedSiteId: PropTypes.number,
 		selectedSiteNonce: PropTypes.string,
 		selectedSiteUrl: PropTypes.string,
+		resetPreviewType: PropTypes.func.isRequired,
 		setLayoutFocus: PropTypes.func.isRequired,
 		clearPreviewUrl: PropTypes.func.isRequired,
 	};
@@ -109,6 +111,6 @@ export default function urlPreview( WebPreview ) {
 
 	return connect(
 		mapStateToProps,
-		{ clearPreviewUrl, setLayoutFocus }
+		{ clearPreviewUrl, setLayoutFocus, resetPreviewType }
 	)( UrlPreview );
 }
