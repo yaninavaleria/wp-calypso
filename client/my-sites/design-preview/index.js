@@ -16,6 +16,7 @@ import { getPreviewUrl } from 'state/ui/preview/selectors';
 import { getSiteOption } from 'state/sites/selectors';
 import { getPreviewMarkup, getPreviewCustomizations, isPreviewUnsaved } from 'state/preview/selectors';
 import { setLayoutFocus } from 'state/ui/layout-focus/actions';
+import { resetPreviewType } from 'state/ui/preview/actions';
 
 const debug = debugFactory( 'calypso:design-preview' );
 
@@ -106,6 +107,7 @@ export default function designPreview( WebPreview ) {
 
 		cleanAndClosePreview() {
 			this.props.clearCustomizations( this.props.selectedSiteId );
+			this.props.resetPreviewType();
 			this.props.setLayoutFocus( 'sidebar' );
 		}
 
@@ -129,7 +131,6 @@ export default function designPreview( WebPreview ) {
 					showPreview={ this.props.showPreview }
 					showExternal={ false }
 					showClose={ false }
-					hasSidebar={ true }
 					previewMarkup={ this.props.previewMarkup }
 					onClose={ this.onClosePreview }
 					onLoad={ this.onLoad }
@@ -150,6 +151,7 @@ export default function designPreview( WebPreview ) {
 		undoCustomization: PropTypes.func.isRequired,
 		fetchPreviewMarkup: PropTypes.func.isRequired,
 		clearCustomizations: PropTypes.func.isRequired,
+		resetPreviewType: PropTypes.func.isRequired,
 		setLayoutFocus: PropTypes.func.isRequired,
 	};
 
@@ -170,6 +172,6 @@ export default function designPreview( WebPreview ) {
 
 	return connect(
 		mapStateToProps,
-		{ fetchPreviewMarkup, undoCustomization, clearCustomizations, setLayoutFocus }
+		{ fetchPreviewMarkup, undoCustomization, clearCustomizations, setLayoutFocus, resetPreviewType }
 	)( DesignPreview );
 }
