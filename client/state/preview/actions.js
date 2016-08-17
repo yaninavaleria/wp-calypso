@@ -9,7 +9,6 @@ import wpcom from 'lib/wp';
  */
 import * as ActionTypes from 'state/action-types';
 import * as customizationSaveFunctions from './save-functions';
-import { requestSitePosts } from 'state/posts/actions';
 
 const debug = debugFactory( 'calypso:preivew-actions' );
 
