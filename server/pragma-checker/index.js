@@ -15,6 +15,7 @@ var IGNORED_MODULES = [
 	'lib/wp', // Different modules on client & server
 	'lib/formatting', // Different modules on client & server
 	'lib/analytics', // nooped on the server until we develop an isomorphic version
+	'lib/olark', // should never run on the server
 	'lib/route', // nooped on the server until we can extract the isomorphic bits
 	'lib/post-normalizer/rule-create-better-excerpt', // nooped on the server until we develop an isomorphic version
 	'lib/upgrades/actions', // nooped on the server as it still uses the singleton Flux architecture

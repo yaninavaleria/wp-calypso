@@ -1,3 +1,5 @@
+/** @ssr-ready **/
+
 import createSelector from 'lib/create-selector';
 import purchasesAssembler from 'lib/purchases/assembler';
 import { isSubscription } from 'lib/purchases';
