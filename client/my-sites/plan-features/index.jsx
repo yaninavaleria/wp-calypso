@@ -22,13 +22,15 @@ import { getPlanDiscountPrice } from 'state/sites/plans/selectors';
 import {
 	getPlanRawPrice,
 	getPlan,
-	getPlanSlug
+	getPlanSlug,
+	getPlanBySlug
 } from 'state/plans/selectors';
 import {
 	isPopular,
 	isMonthly,
 	getPlanFeaturesObject,
-	getPlanClass
+	getPlanClass,
+	getMonthlyPlanByYearly
 } from 'lib/plans/constants';
 import { isFreePlan } from 'lib/plans';
 import { getSiteSlug } from 'state/sites/selectors';
@@ -40,6 +42,7 @@ import {
 import { planItem as getCartItemForPlan } from 'lib/cart-values/cart-items';
 import SpinnerLine from 'components/spinner-line';
 import FoldableCard from 'components/foldable-card';
+import { recordTracksEvent } from 'state/analytics/actions';
 
 class PlanFeatures extends Component {
 
@@ -76,7 +79,7 @@ class PlanFeatures extends Component {
 	}
 
 	renderMobileView() {
-		const { isPlaceholder, translate, planProperties, isInSignup } = this.props;
+		const { isPlaceholder, translate, planProperties, isInSignup, intervalType, site, isInJetpackConnect } = this.props;
 
 		// move any free plan to last place in mobile view
 		let freePlanProperties;
@@ -103,7 +106,8 @@ class PlanFeatures extends Component {
 				planConstantObj,
 				planName,
 				popular,
-				rawPrice
+				rawPrice,
+				relatedMonthlyPlan
 			} = properties;
 
 			return (
@@ -118,6 +122,10 @@ class PlanFeatures extends Component {
 						discountPrice={ discountPrice }
 						billingTimeFrame={ planConstantObj.getBillingTimeFrame() }
 						isPlaceholder={ isPlaceholder }
+						intervalType={ intervalType }
+						site={ site }
+						isInJetpackConnect={ isInJetpackConnect }
+						relatedMonthlyPlan={ relatedMonthlyPlan }
 					/>
 					<p className="plan-features__description">
 						{ planConstantObj.getDescription() }
@@ -158,7 +166,7 @@ class PlanFeatures extends Component {
 	}
 
 	renderPlanHeaders() {
-		const { planProperties, isPlaceholder } = this.props;
+		const { planProperties, isPlaceholder, intervalType, site, isInJetpackConnect } = this.props;
 
 		return map( planProperties, ( properties ) => {
 			const {
@@ -168,7 +176,8 @@ class PlanFeatures extends Component {
 				planConstantObj,
 				planName,
 				popular,
-				rawPrice
+				rawPrice,
+				relatedMonthlyPlan
 			} = properties;
 			const classes = classNames( 'plan-features__table-item', 'has-border-top' );
 			return (
@@ -183,6 +192,10 @@ class PlanFeatures extends Component {
 						discountPrice={ discountPrice }
 						billingTimeFrame={ planConstantObj.getBillingTimeFrame() }
 						isPlaceholder={ isPlaceholder }
+						intervalType={ intervalType }
+						site={ site }
+						isInJetpackConnect={ isInJetpackConnect }
+						relatedMonthlyPlan={ relatedMonthlyPlan }
 					/>
 				</td>
 			);
@@ -345,6 +358,10 @@ class PlanFeatures extends Component {
 			);
 		} );
 	}
+
+	componentWillMount() {
+		this.props.recordTracksEvent( 'calypso_wp_plans_test_view' );
+	}
 }
 
 PlanFeatures.propTypes = {
@@ -354,62 +371,75 @@ PlanFeatures.propTypes = {
 	planProperties: PropTypes.array,
 	isPlaceholder: PropTypes.bool,
 	isInSignup: PropTypes.bool,
-	selectedFeature: PropTypes.string
+	isInJetpackConnect: PropTypes.bool,
+	selectedFeature: PropTypes.string,
+	intervalType: PropTypes.string,
+	site: PropTypes.object
 };
 
 PlanFeatures.defaultProps = {
 	onUpgradeClick: noop,
-	isInSignup: false
+	isInSignup: false,
+	isInJetpackConnect: false,
+	intervalType: 'yearly',
+	site: {}
 };
 
-export default connect( ( state, ownProps ) => {
-	const { isInSignup, placeholder, plans, onUpgradeClick } = ownProps;
-	let isPlaceholder = placeholder;
-	const planProperties = map( plans, ( plan ) => {
-		const planConstantObj = applyTestFiltersToPlansList( plan );
-		const planProductId = planConstantObj.getProductId();
-		const selectedSiteId = isInSignup ? null : getSelectedSiteId( state );
-		const planObject = getPlan( state, planProductId );
-		const isPaid = isCurrentPlanPaid( state, selectedSiteId );
-		const sitePlans = getPlansBySiteId( state, selectedSiteId );
-		const isLoadingSitePlans = ! isInSignup && ! sitePlans.hasLoadedFromServer;
-		const showMonthly = ! isMonthly( plan );
-		const available = isInSignup ? true : canUpgradeToPlan( plan );
+export default connect(
+	( state, ownProps ) => {
+		const { isInSignup, placeholder, plans, onUpgradeClick } = ownProps;
+		let isPlaceholder = placeholder;
+		const planProperties = map( plans, ( plan ) => {
+			const planConstantObj = applyTestFiltersToPlansList( plan );
+			const planProductId = planConstantObj.getProductId();
+			const selectedSiteId = isInSignup ? null : getSelectedSiteId( state );
+			const planObject = getPlan( state, planProductId );
+			const isPaid = isCurrentPlanPaid( state, selectedSiteId );
+			const sitePlans = getPlansBySiteId( state, selectedSiteId );
+			const isLoadingSitePlans = ! isInSignup && ! sitePlans.hasLoadedFromServer;
+			const showMonthly = ! isMonthly( plan );
+			const available = isInSignup ? true : canUpgradeToPlan( plan );
+			const relatedMonthlyPlan = showMonthly ? getPlanBySlug( state, getMonthlyPlanByYearly( plan ) ) : null;
 
-		if ( placeholder || ! planObject || isLoadingSitePlans ) {
-			isPlaceholder = true;
-		}
+			if ( placeholder || ! planObject || isLoadingSitePlans ) {
+				isPlaceholder = true;
+			}
+
+			return {
+				available: available,
+				currencyCode: getCurrentUserCurrencyCode( state ),
+				current: isCurrentSitePlan( state, selectedSiteId, planProductId ),
+				discountPrice: getPlanDiscountPrice( state, selectedSiteId, plan, showMonthly ),
+				features: getPlanFeaturesObject( planConstantObj.getFeatures() ),
+				onUpgradeClick: onUpgradeClick
+					? () => {
+						const planSlug = getPlanSlug( state, planProductId );
+
+						onUpgradeClick( getCartItemForPlan( planSlug ) );
+					}
+					: () => {
+						if ( ! available ) {
+							return;
+						}
+
+						const selectedSiteSlug = getSiteSlug( state, selectedSiteId );
+						page( `/checkout/${ selectedSiteSlug }/${ getPlanPath( plan ) || '' }` );
+					},
+				planConstantObj,
+				planName: plan,
+				planObject: planObject,
+				popular: isPopular( plan ) && ! isPaid,
+				rawPrice: getPlanRawPrice( state, planProductId, ! relatedMonthlyPlan && showMonthly ),
+				relatedMonthlyPlan: relatedMonthlyPlan
+			};
+		} );
 
 		return {
-			available: available,
-			currencyCode: getCurrentUserCurrencyCode( state ),
-			current: isCurrentSitePlan( state, selectedSiteId, planProductId ),
-			discountPrice: getPlanDiscountPrice( state, selectedSiteId, plan, showMonthly ),
-			features: getPlanFeaturesObject( planConstantObj.getFeatures() ),
-			onUpgradeClick: onUpgradeClick
-				? () => {
-					const planSlug = getPlanSlug( state, planProductId );
-
-					onUpgradeClick( getCartItemForPlan( planSlug ) );
-				}
-				: () => {
-					if ( ! available ) {
-						return;
-					}
-
-					const selectedSiteSlug = getSiteSlug( state, selectedSiteId );
-					page( `/checkout/${ selectedSiteSlug }/${ getPlanPath( plan ) || '' }` );
-				},
-			planConstantObj,
-			planName: plan,
-			planObject: planObject,
-			popular: isPopular( plan ) && ! isPaid,
-			rawPrice: getPlanRawPrice( state, planProductId, showMonthly )
+			isPlaceholder,
+			planProperties: planProperties
 		};
-	} );
-
-	return {
-		isPlaceholder,
-		planProperties: planProperties
-	};
-} )( localize( PlanFeatures ) );
+	},
+	{
+		recordTracksEvent
+	}
+)( localize( PlanFeatures ) );
