@@ -348,7 +348,7 @@ const ThemeSheet = React.createClass( {
 		const analyticsPageTitle = `Themes > Details Sheet${ section ? ' > ' + titlecase( section ) : '' }${ siteID ? ' > Site' : '' }`;
 
 		const { name: themeName, description } = this.props;
-		const title = i18n.translate( '%(themeName)s Theme', {
+		const title = themeName && i18n.translate( '%(themeName)s Theme', {
 			args: { themeName }
 		} );
 		const canonicalUrl = `https://wordpress.com/theme/${ this.props.id }`; // TODO: use getDetailsUrl() When it becomes availavle
@@ -372,7 +372,7 @@ const ThemeSheet = React.createClass( {
 		return (
 			<Main className="theme__sheet">
 				<DocumentHead
-					title={ themeName && decodeEntities( title ) + ' — WordPress.com' }
+					title={ title }
 					metas={ metas }
 					links={ links } />
 				<PageViewTracker path={ analyticsPath } title={ analyticsPageTitle }/>
