@@ -373,8 +373,8 @@ const ThemeSheet = React.createClass( {
 			<Main className="theme__sheet">
 				<DocumentHead
 					title={ title }
-					metas={ metas }
-					links={ links } />
+					meta={ metas }
+					link={ links } />
 				<PageViewTracker path={ analyticsPath } title={ analyticsPageTitle }/>
 					{ this.renderBar() }
 					{ siteID && <QueryCurrentTheme siteId={ siteID }/> }
