@@ -10,3 +10,6 @@ export function getPreviewUrl( state ) {
 	return state.ui.preview.currentPreviewUrl;
 }
 
+export function getActiveDesignTool( state ) {
+	return state.ui.preview.activeDesignTool;
+}

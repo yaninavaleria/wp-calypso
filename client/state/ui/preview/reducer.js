@@ -9,6 +9,7 @@ import { combineReducers } from 'redux';
 import {
 	PREVIEW_URL_CLEAR,
 	PREVIEW_URL_SET,
+	PREVIEW_TOOL_SET,
 } from 'state/action-types';
 
 export function currentPreviewUrl( state = null, action ) {
@@ -21,6 +22,15 @@ export function currentPreviewUrl( state = null, action ) {
 	return state;
 }
 
+export function activeDesignTool( state = null, action ) {
+	switch ( action.type ) {
+		case PREVIEW_TOOL_SET:
+			return action.id;
+	}
+	return state;
+}
+
 export default combineReducers( {
 	currentPreviewUrl,
+	activeDesignTool,
 } );
