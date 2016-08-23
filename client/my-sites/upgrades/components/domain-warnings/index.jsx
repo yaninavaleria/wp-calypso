@@ -50,9 +50,10 @@ export default React.createClass( {
 				'unverifiedDomains',
 				'pendingGappsToAcceptanceDomains',
 				'wrongNSMappedDomains',
-				'newDomains'
+				'newDomains',
+				'pendingTransfer'
 			]
-		}
+		};
 	},
 
 	renewLink( count ) {
@@ -79,7 +80,8 @@ export default React.createClass( {
 				this.unverifiedDomains,
 				this.pendingGappsTosAcceptanceDomains,
 				this.wrongNSMappedDomains,
-				this.newDomains
+				this.newDomains,
+				this.pendingTransfer
 			],
 			validRules = this.props.ruleWhiteList.map( ruleName => this[ ruleName ] );
 
@@ -343,6 +345,39 @@ export default React.createClass( {
 				siteSlug={ this.props.selectedSite && this.props.selectedSite.slug }
 				domains={ pendingDomains }
 				section="domain-management" />;
+	},
+
+	pendingTransfer() {
+		const domains = this.getDomains().filter( domain => domain.pendingTransfer );
+
+		if ( domains.length !== 1 ) {
+			return null;
+		}
+
+		const domain = domains[ 0 ];
+
+		const compactNotice = this.translate( '%(domain)s is pending transfer.', {
+				args: {
+					domain: domain.name
+				}
+			} ),
+			fullNotice = this.translate( '%(domain)s is pending transfer. You must wait for the transfer to finish, and then update the settings at the new registrar.', {
+				args: {
+					domain: domain.name
+				}
+			} );
+
+		return (
+			<Notice
+				isCompact={ this.props.isCompact }
+				status="is-error"
+				showDismiss={ false }
+				className="domain-warnings__notice"
+				key="unverified-domains"
+				text={ this.props.isCompact && compactNotice }>
+				{ ! this.props.isCompact && fullNotice }
+			</Notice>
+		);
 	},
 
 	componentWillMount: function() {

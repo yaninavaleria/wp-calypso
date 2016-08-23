@@ -103,12 +103,13 @@ const RegisteredDomain = React.createClass( {
 				'newDomainsWithPrimary',
 				'newDomains',
 				'pendingGappsTosAcceptanceDomains',
-				'wrongNSMappedDomains'
+				'wrongNSMappedDomains',
+				'pendingTransfer'
 			] }/>;
 	},
 
 	getVerticalNav() {
-		if ( this.props.domain.expired ) {
+		if ( this.props.domain.expired || this.props.domain.pendingTransfer ) {
 			return null;
 		}
 

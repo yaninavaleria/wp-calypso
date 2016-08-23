@@ -46,6 +46,7 @@ describe( 'assembler', () => {
 			name: DOMAIN_NAME,
 			manualTransferRequired: undefined,
 			privateDomain: undefined,
+			pendingTransfer: undefined,
 			registrationDate: undefined,
 			registrationMoment: undefined,
 			type: domainTypes.SITE_REDIRECT,
