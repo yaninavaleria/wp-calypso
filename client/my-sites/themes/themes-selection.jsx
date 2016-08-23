@@ -34,6 +34,8 @@ const ThemesSelection = React.createClass( {
 		themesList: PropTypes.array.isRequired,
 		getActionLabel: React.PropTypes.func,
 		tier: React.PropTypes.string,
+		filter: React.PropTypes.string,
+		vertical: React.PropTypes.string,
 	},
 
 	getDefaultProps() {
@@ -85,11 +87,14 @@ const ThemesSelection = React.createClass( {
 	},
 
 	updateUrl( tier, filter, searchString = this.props.search ) {
-		const siteId = this.props.siteId ? `/${this.props.siteId}` : '';
+		const { siteId, vertical } = this.props;
+
+		const siteIdSection = siteId ? `/${ siteId }` : '';
+		const verticalSection = vertical ? `/${ vertical }` : '';
 		const tierSection = tier === 'all' ? '' : `/${ tier }`;
 		const filterSection = filter ? `/filter/${ filter }` : '';
-		const url = `/design${ tierSection }${ filterSection }${siteId}`;
 
+		const url = `/design${ verticalSection }${ tierSection }${ filterSection }${siteIdSection}`;
 		page( buildUrl( url, searchString ) );
 	},
 
@@ -102,7 +107,14 @@ const ThemesSelection = React.createClass( {
 	},
 
 	render() {
-		const site = this.props.selectedSite;
+		const { selectedSite: site, vertical }  = this.props;
+		let filter = this.props.filter || '';
+		if ( filter && vertical ) {
+			filter += ',';
+		}
+		if ( vertical ) {
+			filter += vertical;
+		}
 
 		return (
 			<div className="themes__selection">
@@ -119,7 +131,7 @@ const ThemesSelection = React.createClass( {
 						isMultisite={ ! this.props.siteId } // Not the same as `! site` !
 						search={ this.props.search }
 						tier={ this.props.tier }
-						filter={ this.props.filter }
+						filter={ filter }
 						onRealScroll={ this.trackScrollPage }
 						onLastPage={ this.trackLastPage } >
 					<ThemesList getButtonOptions={ this.props.getOptions }
