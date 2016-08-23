@@ -185,7 +185,7 @@ export default React.createClass( {
 				isCompact={ this.props.isCompact }
 				status="is-error"
 				showDismiss={ false }
-				key="expired-domains"
+				key="expired-domains-can-manage"
 				text={ text }>
 				{ renewLink }
 			</Notice>
@@ -223,7 +223,7 @@ export default React.createClass( {
 			<Notice
 				isCompact={ this.props.isCompact }
 				showDismiss={ false }
-				key="expired-domains"
+				key="expired-domains-cannot-manage"
 				text={ text } />
 		);
 	},
@@ -254,7 +254,7 @@ export default React.createClass( {
 				isCompact={ this.props.isCompact }
 				status="is-error"
 				showDismiss={ false }
-				key="expiring-domains"
+				key="expiring-domains-can-manage"
 				text={ text }>
 				{ renewLink }
 			</Notice>
@@ -291,7 +291,7 @@ export default React.createClass( {
 			<Notice
 				isCompact={ this.props.isCompact }
 				showDismiss={ false }
-				key="expiring-domains"
+				key="expiring-domains-cannot-manage"
 				text={ text } />
 		);
 	},
@@ -385,7 +385,7 @@ export default React.createClass( {
 					status="is-error"
 					showDismiss={ false }
 					className="domain-warnings__notice"
-					key="unverified-domains"
+					key="unverified-domains-can-manage"
 					text={ this.props.isCompact ? compactMessage : fullMessage }>
 					<NoticeAction href={ paths.domainManagementEdit( this.props.selectedSite.slug, domain ) }>
 						{ this.translate( 'Fix' ) }
@@ -417,7 +417,7 @@ export default React.createClass( {
 				status="is-error"
 				showDismiss={ false }
 				className="domain-warnings__notice"
-				key="unverified-domains"
+				key="unverified-domains-can-manage"
 				text={ this.props.isCompact && compactNoticeText }>
 				{ this.props.isCompact ? compactContent : fullContent }
 			</Notice>
@@ -450,7 +450,7 @@ export default React.createClass( {
 					isCompact={ this.props.isCompact }
 					showDismiss={ false }
 					className="domain-warnings__notice"
-					key="unverified-domains"
+					key="unverified-domains-cannot-manage"
 					text={ this.props.isCompact ? compactMessage : fullMessage }>
 				</Notice>
 			);
@@ -474,7 +474,7 @@ export default React.createClass( {
 				status="is-error"
 				showDismiss={ false }
 				className="domain-warnings__notice"
-				key="unverified-domains"
+				key="unverified-domains-cannot-manage"
 				text={ this.props.isCompact && compactNoticeText }>
 				{ ! this.props.isCompact && fullContent }
 			</Notice>
