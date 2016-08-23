@@ -1989,6 +1989,46 @@ Undocumented.prototype.getWordadsStatus = function( siteId, fn ) {
 };
 
 /**
+ * Get my help courses.
+ *
+ * @returns {Promise} A promise that resolves with help courses
+ */
+Undocumented.prototype.getHelpCourses = function() {
+	// Just return some temporary data since this endpoint doesn't actually exist yet.
+	return new Promise( resolve => {
+		resolve( {
+			canRegister: true,
+			courses: [
+				{
+					title: 'Title goes here',
+					description: 'Description goes here!',
+					schedule: [
+						{
+							date: 'September 1 at 9am',
+							registrationUrl: 'http://wordpress.com'
+						},
+						{
+							date: 'September 12 at 9am',
+							registrationUrl: 'http://wordpress.com'
+						},
+						{
+							date: 'September 24 at 9am',
+							registrationUrl: 'http://wordpress.com'
+						},
+					],
+					recent: [
+						{
+							date: 'August 1 at 9am',
+							video: 'http://wordpress.com/some-video.mp4'
+						}
+					]
+				}
+			]
+		} );
+	} );
+};
+
+/**
  * Expose `Undocumented` module
  */
 module.exports = Undocumented;
