@@ -201,7 +201,7 @@ export default React.createClass( {
 		}
 
 		if ( expiredDomains.length === 1 ) {
-			text = this.translate( '%(domainName)s expired %(timeSince)s. It can be renewed by the user {{strong}}%(owner)s{{/strong}}.', {
+			text = this.translate( 'The domain %(domainName)s expired %(timeSince)s. It can be renewed by the user {{strong}}%(owner)s{{/strong}}.', {
 				components: {
 					strong: <strong />
 				},
@@ -214,7 +214,7 @@ export default React.createClass( {
 				comment: '%(timeSince)s is something like "a year ago"'
 			} );
 		} else {
-			text = this.translate( 'Some of the domains on this site expired recently. They can be renewed by the users who registered them.', {
+			text = this.translate( 'Some domains on this site expired recently. They can be renewed by the user who registered them.', {
 				context: 'Expired domain notice'
 			} );
 		}
@@ -269,7 +269,7 @@ export default React.createClass( {
 			return null;
 		}
 		if ( expiringDomains.length === 1 ) {
-			text = this.translate( '%(domainName)s is expiring %(timeUntil)s. It can be renewed by the user {{strong}}%(owner)s{{/strong}}.', {
+			text = this.translate( 'The domain %(domainName)s will expire in %(timeUntil)s. It can be renewed by the user {{strong}}%(owner)s{{/strong}}.', {
 				components: {
 					strong: <strong />
 				},
@@ -282,7 +282,7 @@ export default React.createClass( {
 				comment: '%(timeUntil)s is something like "in a week"'
 			} );
 		} else {
-			text = this.translate( 'Some of the domains on this site are expiring soon. They can be renewed by the users who registered them.', {
+			text = this.translate( 'Some domains on this site are about to expire. They can be renewed by the user who registered them.', {
 				context: 'Expiring domain notice'
 			} );
 		}
@@ -377,7 +377,7 @@ export default React.createClass( {
 		if ( domains.length === 1 ) {
 			const domain = domains[ 0 ].name,
 				fullMessage = this.translate( 'Your domain %(domain)s may be suspended because your email address is not verified.', { args: { domain } } ),
-				compactMessage = this.translate( '%(domain)s may be suspended.', { args: { domain } } );
+				compactMessage = this.translate( 'Issues with %(domain)s.', { args: { domain } } );
 
 			return (
 				<Notice
@@ -404,7 +404,7 @@ export default React.createClass( {
 					</ul>
 				</span>
 			),
-			compactNoticeText = this.translate( 'Your domains may be suspended.' ),
+			compactNoticeText = this.translate( 'Issues with your domains.' ),
 			compactContent = (
 				<NoticeAction href={ paths.domainManagementList( this.props.selectedSite.slug ) }>
 					{ this.translate( 'Fix' ) }
@@ -433,7 +433,7 @@ export default React.createClass( {
 
 		if ( domains.length === 1 ) {
 			const fullMessage = this.translate(
-				'The domain %(domain)s may be suspended because the contact information is not verified. It can be verified by the user {{strong}}%(owner)s{{/strong}}.',
+				'The domain %(domain)s may be suspended because the owner ({{strong}}%(owner)s{{/strong}}) has not verified their contact information.',
 				{
 					components: {
 						strong: <strong />
@@ -444,8 +444,7 @@ export default React.createClass( {
 					}
 				}
 				),
-				compactMessage = this.translate( '%(domain)s may be suspended.', { args: { domain: domains[ 0 ].name } } );
-
+				compactMessage = this.translate( 'Issues with %(domain)s.', { args: { domain: domains[ 0 ].name } } );
 			return (
 				<Notice
 					isCompact={ this.props.isCompact }
@@ -459,7 +458,7 @@ export default React.createClass( {
 
 		const fullContent = (
 				<span>
-					{ this.translate( 'Some of the domains on this site may be suspended because their contact information was not verified. They can be verified by the users who registered them.' ) }
+					{ this.translate( 'Some domains on this site are about to be suspended because the owner has not verified their contact information.' ) }
 					<ul>{
 						domains.map( ( domain ) => {
 							return <li key={ domain.name }>{ domain.name }</li>;
@@ -467,7 +466,7 @@ export default React.createClass( {
 					}</ul>
 				</span>
 			),
-			compactNoticeText = this.translate( 'Some domains on this site may be suspended.' );
+			compactNoticeText = this.translate( 'Issues with domains on this site.' );
 
 		return (
 			<Notice
