@@ -107,7 +107,7 @@ const ThemesSelection = React.createClass( {
 	},
 
 	render() {
-		const { selectedSite: site, vertical }  = this.props;
+		const { selectedSite: site, vertical } = this.props;
 		let filter = this.props.filter || '';
 		if ( filter && vertical ) {
 			filter += ',';
