@@ -22,7 +22,7 @@ module.exports = React.createClass( {
 	render: function() {
 		return (
 			<li className='module-content-list-item-action'>
-				<a href={ this.props.href } onClick={ this.clickHandler } target="_blank" className='module-content-list-item-action-wrapper' title={ this.translate( 'View content in a new window', { textOnly: true, context: 'Stats action tooltip: View content in a new window' } ) } aria-label={ this.translate( 'View content in a new window', { textOnly: true, context: 'Stats ARIA label: View content in new window action' } ) } >
+				<a href={ this.props.href } onClick={ this.clickHandler } target="_blank" rel="noopener noreferrer" className='module-content-list-item-action-wrapper' title={ this.translate( 'View content in a new window', { textOnly: true, context: 'Stats action tooltip: View content in a new window' } ) } aria-label={ this.translate( 'View content in a new window', { textOnly: true, context: 'Stats ARIA label: View content in new window action' } ) } >
 					<Gridicon icon="external" size={ 18 } />
 					<span className='module-content-list-item-action-label module-content-list-item-action-label-view'>{ this.translate( 'View', { context: 'Stats: List item action to view content' } ) }</span>
 				</a>

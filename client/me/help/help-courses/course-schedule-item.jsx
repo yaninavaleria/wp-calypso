@@ -36,6 +36,7 @@ export default localize( ( props ) => {
 				{ isBusinessPlanUser
 					? ( <Button className="help-courses__course-schedule-item-register-button"
 						target="_blank"
+						rel="noopener noreferrer"
 						href={ registrationUrl }>
 						{ translate( 'Register' ) }
 					</Button> )

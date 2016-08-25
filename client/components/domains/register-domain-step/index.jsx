@@ -529,6 +529,7 @@ const RegisterDomainStep = React.createClass( {
 						components: {
 							a: <a
 								target="_blank"
+								rel="noopener noreferrer"
 								href={ `https://dotblog.wordpress.com/
 									?email=${ this.props.currentUser && encodeURIComponent( this.props.currentUser.email ) || '' }
 									&domain=${ domain }`
@@ -548,7 +549,7 @@ const RegisterDomainStep = React.createClass( {
 							args: { tld: domain.substring( tldIndex ) },
 							components: {
 								strong: <strong />,
-								a: <a target="_blank" href={ support.MAP_EXISTING_DOMAIN } />
+								a: <a target="_blank" rel="noopener noreferrer" href={ support.MAP_EXISTING_DOMAIN } />
 							}
 						}
 					);
@@ -572,7 +573,7 @@ const RegisterDomainStep = React.createClass( {
 						{
 							components: {
 								strong: <strong />,
-								a1: <a target="_blank" href="http://wordpressfoundation.org/trademark-policy/"/>,
+								a1: <a target="_blank" rel="noopener noreferrer" href="http://wordpressfoundation.org/trademark-policy/"/>,
 								a2: <a href={ support.CALYPSO_CONTACT }/>
 							}
 						}

@@ -191,6 +191,7 @@ var MapDomainStep = React.createClass( {
 						components: {
 							a: <a
 								target="_blank"
+								rel="noopener noreferrer"
 								href={ `https://dotblog.wordpress.com/
 								?email=${ this.props.currentUser && encodeURIComponent( this.props.currentUser.email ) || '' }
 								&domain=${ domain }` }/>
@@ -227,7 +228,7 @@ var MapDomainStep = React.createClass( {
 						{
 							components: {
 								strong: <strong />,
-								a1: <a target="_blank" href="http://wordpressfoundation.org/trademark-policy/"/>,
+								a1: <a target="_blank" rel="noopener noreferrer" href="http://wordpressfoundation.org/trademark-policy/"/>,
 								a2: <a href={ support.CALYPSO_CONTACT }/>
 							}
 						}

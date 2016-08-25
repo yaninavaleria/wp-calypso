@@ -24,8 +24,8 @@ import { hasPendingGoogleAppsUsers } from 'lib/domains';
 const domainTypes = domainConstants.type;
 const debug = _debug( 'calypso:domain-warnings' );
 
-const allAboutDomainsLink = <a href={ support.ALL_ABOUT_DOMAINS } target="_blank"/>,
-	domainsLink = <a href={ support.DOMAINS } target="_blank" />,
+const allAboutDomainsLink = <a href={ support.ALL_ABOUT_DOMAINS } target="_blank" rel="noopener noreferrer"/>,
+	domainsLink = <a href={ support.DOMAINS } target="_blank" rel="noopener noreferrer" />,
 	pNode = <p />;
 
 export default React.createClass( {
@@ -150,7 +150,7 @@ export default React.createClass( {
 			noticeProps.text = this.translate( 'DNS configuration required' );
 			children = <NoticeAction href={ paths.domainManagementList( this.props.selectedSite.slug ) }>{ this.translate( 'Fix' ) }</NoticeAction>;
 		} else {
-			children = <span>{ text } <a href={ learnMoreUrl } target="_blank">{ this.translate( 'Learn more' ) }</a>{ offendingList }</span>;
+			children = <span>{ text } <a href={ learnMoreUrl } target="_blank" rel="noopener noreferrer">{ this.translate( 'Learn more' ) }</a>{ offendingList }</span>;
 		}
 		return <Notice { ...noticeProps }>{ children }</Notice>;
 	},
@@ -250,7 +250,7 @@ export default React.createClass( {
 						components: {
 							domainsLink,
 							pNode,
-							tryNowLink: <a href={ `http://${domain.name}` } target="_blank"/>
+							tryNowLink: <a href={ `http://${domain.name}` } target="_blank" rel="noopener noreferrer"/>
 						}
 					}
 				);
@@ -262,7 +262,7 @@ export default React.createClass( {
 						args: { domainName: domain.name },
 						components: {
 							allAboutDomainsLink,
-							tryNowLink: <a href={ `http://${domain.name}` } target="_blank"/>
+							tryNowLink: <a href={ `http://${domain.name}` } target="_blank" rel="noopener noreferrer"/>
 						}
 					}
 				);

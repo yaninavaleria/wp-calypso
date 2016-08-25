@@ -58,6 +58,7 @@ module.exports = React.createClass( {
 											onClick={ this.recordClickEvent( 'My Profile Link' ) }
 											href={ gravatarProfileLink }
 											target="_blank"
+											rel="noopener noreferrer"
 										/>
 									),
 									hovercardslink: (
@@ -65,6 +66,7 @@ module.exports = React.createClass( {
 											onClick={ this.recordClickEvent( 'Gravatar Hovercards Link' ) }
 											href="https://support.wordpress.com/gravatar-hovercards/"
 											target="_blank"
+											rel="noopener noreferrer"
 										/>
 									)
 								}
