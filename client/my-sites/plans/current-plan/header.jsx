@@ -80,7 +80,7 @@ export default localize( ( {
 							{ tagLine }
 						</h2>
 					</div>
-					<Card compact>
+					<Card className="current-plan__header-purchase-info-wrapper" compact>
 						{ getPurchaseInfo() }
 					</Card>
 				</div>
