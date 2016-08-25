@@ -128,10 +128,15 @@ const Help = React.createClass( {
 
 		return (
 			<HelpTeaserButton
+				onClick={ this.trackCoursesButtonClick }
 				href="/help/courses"
 				title={ this.translate( 'Courses' ) }
 				description={ this.translate( 'Learn how to make the most of your site with these courses and webinars' ) }/>
 		);
+	},
+
+	trackCoursesButtonClick() {
+		analytics.tracks.recordEvent( 'calypso_help_courses_click' );
 	},
 
 	getPlaceholders() {

@@ -10,6 +10,7 @@ import Button from 'components/button';
 import { localize } from 'i18n-calypso';
 import Gridicon from 'components/gridicon';
 import Card from 'components/card';
+import analytics from 'lib/analytics';
 
 export default localize( ( props ) => {
 	const {
@@ -18,6 +19,10 @@ export default localize( ( props ) => {
 		isBusinessPlanUser,
 		translate
 	} = props;
+
+	const trackRegistrationClick = () => {
+		analytics.tracks.recordEvent( 'calypso_help_course_registration_click', { registrationUrl } );
+	};
 
 	return (
 		<Card compact className="help-courses__course-schedule-item">
@@ -35,6 +40,7 @@ export default localize( ( props ) => {
 			<div className="help-courses__course-schedule-item-buttons">
 				{ isBusinessPlanUser
 					? ( <Button className="help-courses__course-schedule-item-register-button"
+						onclick={ trackRegistrationClick }
 						target="_blank"
 						href={ registrationUrl }>
 						{ translate( 'Register' ) }
