@@ -47,9 +47,6 @@
     "anymatch": {
       "version": "1.3.0"
     },
-    "aproba": {
-      "version": "1.0.4"
-    },
     "are-we-there-yet": {
       "version": "1.1.2"
     },
@@ -114,7 +111,7 @@
       "version": "0.9.0"
     },
     "async-each": {
-      "version": "1.0.0"
+      "version": "1.0.1"
     },
     "async-foreach": {
       "version": "0.1.3"
@@ -157,7 +154,7 @@
       "version": "6.0.4"
     },
     "babel-generator": {
-      "version": "6.11.4",
+      "version": "6.14.0",
       "dependencies": {
         "source-map": {
           "version": "0.5.6"
@@ -198,7 +195,7 @@
       "version": "6.11.2"
     },
     "babel-helper-replace-supers": {
-      "version": "6.8.0"
+      "version": "6.14.0"
     },
     "babel-helpers": {
       "version": "6.8.0"
@@ -252,10 +249,10 @@
       "version": "6.8.0"
     },
     "babel-plugin-transform-es2015-block-scoping": {
-      "version": "6.10.1"
+      "version": "6.14.0"
     },
     "babel-plugin-transform-es2015-classes": {
-      "version": "6.9.0"
+      "version": "6.14.0"
     },
     "babel-plugin-transform-es2015-computed-properties": {
       "version": "6.8.0"
@@ -276,7 +273,7 @@
       "version": "6.8.0"
     },
     "babel-plugin-transform-es2015-modules-commonjs": {
-      "version": "6.11.5"
+      "version": "6.14.0"
     },
     "babel-plugin-transform-es2015-object-super": {
       "version": "6.8.0"
@@ -318,16 +315,27 @@
       "version": "6.8.0"
     },
     "babel-plugin-transform-regenerator": {
-      "version": "6.11.4",
+      "version": "6.14.0",
       "dependencies": {
         "babel-core": {
-          "version": "6.13.2"
+          "version": "6.14.0"
+        },
+        "babel-register": {
+          "version": "6.14.0"
         },
         "minimatch": {
           "version": "3.0.3"
         },
         "source-map": {
           "version": "0.5.6"
+        },
+        "source-map-support": {
+          "version": "0.2.10",
+          "dependencies": {
+            "source-map": {
+              "version": "0.1.32"
+            }
+          }
         }
       }
     },
@@ -361,13 +369,13 @@
       "version": "6.11.6"
     },
     "babel-template": {
-      "version": "6.9.0"
+      "version": "6.14.0"
     },
     "babel-traverse": {
-      "version": "6.13.0"
+      "version": "6.14.0"
     },
     "babel-types": {
-      "version": "6.13.0"
+      "version": "6.14.0"
     },
     "babylon": {
       "version": "6.9.1"
@@ -412,7 +420,15 @@
       "version": "1.2.1"
     },
     "bl": {
-      "version": "1.1.2"
+      "version": "1.0.3",
+      "dependencies": {
+        "isarray": {
+          "version": "1.0.0"
+        },
+        "readable-stream": {
+          "version": "2.0.6"
+        }
+      }
     },
     "blanket": {
       "version": "1.1.6",
@@ -432,7 +448,7 @@
       "version": "0.0.9"
     },
     "bluebird": {
-      "version": "3.4.1"
+      "version": "3.4.3"
     },
     "body-parser": {
       "version": "1.15.2",
@@ -467,7 +483,15 @@
       "version": "1.3.6"
     },
     "buffer": {
-      "version": "4.9.1"
+      "version": "4.9.1",
+      "dependencies": {
+        "isarray": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    "buffer-shims": {
+      "version": "1.0.0"
     },
     "builtin-modules": {
       "version": "1.1.1"
@@ -502,7 +526,7 @@
       }
     },
     "caniuse-db": {
-      "version": "1.0.30000525"
+      "version": "1.0.30000526"
     },
     "caseless": {
       "version": "0.11.0"
@@ -668,7 +692,15 @@
       "version": "0.0.1"
     },
     "concat-stream": {
-      "version": "1.5.1"
+      "version": "1.5.1",
+      "dependencies": {
+        "isarray": {
+          "version": "1.0.0"
+        },
+        "readable-stream": {
+          "version": "2.0.6"
+        }
+      }
     },
     "configstore": {
       "version": "0.3.2",
@@ -685,9 +717,6 @@
       "version": "1.1.0"
     },
     "console-browserify": {
-      "version": "1.1.0"
-    },
-    "console-control-strings": {
       "version": "1.1.0"
     },
     "constant-case": {
@@ -754,15 +783,7 @@
       "version": "1.2.0"
     },
     "css-tokenize": {
-      "version": "1.0.1",
-      "dependencies": {
-        "isarray": {
-          "version": "0.0.1"
-        },
-        "readable-stream": {
-          "version": "1.1.14"
-        }
-      }
+      "version": "1.0.1"
     },
     "css-what": {
       "version": "2.1.0"
@@ -871,7 +892,12 @@
       "version": "2.0.0"
     },
     "doctrine": {
-      "version": "1.3.0"
+      "version": "1.3.0",
+      "dependencies": {
+        "isarray": {
+          "version": "1.0.0"
+        }
+      }
     },
     "doctypes": {
       "version": "1.1.0"
@@ -925,21 +951,19 @@
       "version": "0.1.1"
     },
     "duplexer2": {
-      "version": "0.0.2",
-      "dependencies": {
-        "isarray": {
-          "version": "0.0.1"
-        },
-        "readable-stream": {
-          "version": "1.1.14"
-        }
-      }
+      "version": "0.0.2"
     },
     "duplexify": {
       "version": "3.4.5",
       "dependencies": {
         "end-of-stream": {
           "version": "1.0.0"
+        },
+        "isarray": {
+          "version": "1.0.0"
+        },
+        "readable-stream": {
+          "version": "2.1.5"
         }
       }
     },
@@ -1012,18 +1036,18 @@
       "version": "1.0.0"
     },
     "env-hash": {
-      "version": "1.1.0",
-      "dependencies": {
-        "lodash": {
-          "version": "4.15.0"
-        }
-      }
+      "version": "1.1.0"
     },
     "enzyme": {
       "version": "2.4.1"
     },
     "errno": {
-      "version": "0.1.4"
+      "version": "0.1.4",
+      "dependencies": {
+        "prr": {
+          "version": "0.0.0"
+        }
+      }
     },
     "error-ex": {
       "version": "1.3.0"
@@ -1149,9 +1173,6 @@
         },
         "globals": {
           "version": "9.9.0"
-        },
-        "strip-json-comments": {
-          "version": "1.0.4"
         },
         "supports-color": {
           "version": "2.0.0"
@@ -1403,7 +1424,7 @@
       "version": "1.0.0"
     },
     "gauge": {
-      "version": "2.6.0"
+      "version": "1.2.7"
     },
     "gaze": {
       "version": "1.1.1"
@@ -1530,9 +1551,6 @@
         "async": {
           "version": "2.0.1"
         },
-        "lodash": {
-          "version": "4.15.0"
-        },
         "source-map": {
           "version": "0.5.6"
         }
@@ -1545,23 +1563,10 @@
       "version": "2.0.0"
     },
     "has-binary": {
-      "version": "0.1.6",
-      "dependencies": {
-        "isarray": {
-          "version": "0.0.1"
-        }
-      }
+      "version": "0.1.6"
     },
     "has-binary-data": {
-      "version": "0.1.3",
-      "dependencies": {
-        "isarray": {
-          "version": "0.0.1"
-        }
-      }
-    },
-    "has-color": {
-      "version": "0.1.7"
+      "version": "0.1.3"
     },
     "has-cors": {
       "version": "1.0.3"
@@ -1636,15 +1641,7 @@
       "version": "1.1.1"
     },
     "htmlparser2": {
-      "version": "3.8.3",
-      "dependencies": {
-        "isarray": {
-          "version": "0.0.1"
-        },
-        "readable-stream": {
-          "version": "1.1.14"
-        }
-      }
+      "version": "3.8.3"
     },
     "http-browserify": {
       "version": "1.7.0"
@@ -1866,13 +1863,18 @@
       "version": "0.2.1"
     },
     "isarray": {
-      "version": "1.0.0"
+      "version": "0.0.1"
     },
     "isexe": {
       "version": "1.1.2"
     },
     "isobject": {
-      "version": "2.1.0"
+      "version": "2.1.0",
+      "dependencies": {
+        "isarray": {
+          "version": "1.0.0"
+        }
+      }
     },
     "isomorphic-fetch": {
       "version": "2.2.1"
@@ -2001,12 +2003,7 @@
       "version": "0.0.0"
     },
     "jsonist": {
-      "version": "1.2.0",
-      "dependencies": {
-        "bl": {
-          "version": "1.0.3"
-        }
-      }
+      "version": "1.2.0"
     },
     "jsonparse": {
       "version": "0.0.5"
@@ -2060,34 +2057,16 @@
       "version": "1.0.4"
     },
     "level-iterator-stream": {
-      "version": "1.3.1",
-      "dependencies": {
-        "isarray": {
-          "version": "0.0.1"
-        },
-        "readable-stream": {
-          "version": "1.1.14"
-        }
-      }
+      "version": "1.3.1"
     },
     "level-packager": {
       "version": "1.2.0"
     },
     "leveldown": {
-      "version": "1.4.6",
-      "dependencies": {
-        "nan": {
-          "version": "2.3.5"
-        }
-      }
+      "version": "1.4.6"
     },
     "levelup": {
-      "version": "1.3.2",
-      "dependencies": {
-        "prr": {
-          "version": "1.0.1"
-        }
-      }
+      "version": "1.3.2"
     },
     "levn": {
       "version": "0.3.0"
@@ -2201,7 +2180,15 @@
       "version": "0.3.0"
     },
     "memory-fs": {
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "dependencies": {
+        "isarray": {
+          "version": "1.0.0"
+        },
+        "readable-stream": {
+          "version": "2.1.5"
+        }
+      }
     },
     "meow": {
       "version": "3.7.0"
@@ -2322,7 +2309,7 @@
       "version": "0.0.5"
     },
     "nan": {
-      "version": "2.4.0"
+      "version": "2.3.5"
     },
     "natives": {
       "version": "1.0.2"
@@ -2368,27 +2355,13 @@
       }
     },
     "node-libs-browser": {
-      "version": "0.6.0",
-      "dependencies": {
-        "isarray": {
-          "version": "0.0.1"
-        },
-        "readable-stream": {
-          "version": "1.1.14"
-        }
-      }
+      "version": "0.6.0"
     },
     "node-ninja": {
       "version": "1.0.2",
       "dependencies": {
-        "gauge": {
-          "version": "1.2.7"
-        },
         "minimatch": {
           "version": "3.0.3"
-        },
-        "npmlog": {
-          "version": "2.0.4"
         }
       }
     },
@@ -2442,7 +2415,7 @@
       "version": "1.1.1"
     },
     "npmlog": {
-      "version": "3.1.2"
+      "version": "2.0.4"
     },
     "nth-check": {
       "version": "1.0.1"
@@ -2540,9 +2513,6 @@
     "page": {
       "version": "1.6.4",
       "dependencies": {
-        "isarray": {
-          "version": "0.0.1"
-        },
         "path-to-regexp": {
           "version": "1.2.1"
         }
@@ -2692,12 +2662,6 @@
       "dependencies": {
         "async": {
           "version": "1.5.2"
-        },
-        "gauge": {
-          "version": "1.2.7"
-        },
-        "npmlog": {
-          "version": "2.0.4"
         }
       }
     },
@@ -2738,7 +2702,7 @@
       "version": "1.0.10"
     },
     "prr": {
-      "version": "0.0.0"
+      "version": "1.0.1"
     },
     "ps-tree": {
       "version": "0.0.3"
@@ -2783,12 +2747,7 @@
       "version": "2.1.7"
     },
     "rc": {
-      "version": "1.1.6",
-      "dependencies": {
-        "strip-json-comments": {
-          "version": "1.0.4"
-        }
-      }
+      "version": "1.1.6"
     },
     "react": {
       "version": "15.3.0",
@@ -2910,7 +2869,15 @@
       }
     },
     "read-all-stream": {
-      "version": "3.1.0"
+      "version": "3.1.0",
+      "dependencies": {
+        "isarray": {
+          "version": "1.0.0"
+        },
+        "readable-stream": {
+          "version": "2.1.5"
+        }
+      }
     },
     "read-file-stdin": {
       "version": "0.2.1"
@@ -2922,13 +2889,19 @@
       "version": "1.0.1"
     },
     "readable-stream": {
-      "version": "2.0.6"
+      "version": "1.1.14"
     },
     "readdirp": {
       "version": "2.1.0",
       "dependencies": {
+        "isarray": {
+          "version": "1.0.0"
+        },
         "minimatch": {
           "version": "3.0.3"
+        },
+        "readable-stream": {
+          "version": "2.1.5"
         }
       }
     },
@@ -2994,8 +2967,17 @@
     "request": {
       "version": "2.74.0",
       "dependencies": {
+        "bl": {
+          "version": "1.1.2"
+        },
+        "isarray": {
+          "version": "1.0.0"
+        },
         "qs": {
           "version": "6.2.1"
+        },
+        "readable-stream": {
+          "version": "2.0.6"
         }
       }
     },
@@ -3033,7 +3015,7 @@
       "version": "2.5.4",
       "dependencies": {
         "glob": {
-          "version": "7.0.5"
+          "version": "7.0.6"
         },
         "minimatch": {
           "version": "3.0.3"
@@ -3077,7 +3059,12 @@
       "version": "1.0.0"
     },
     "rtlcss": {
-      "version": "2.0.5"
+      "version": "2.0.5",
+      "dependencies": {
+        "strip-json-comments": {
+          "version": "2.0.1"
+        }
+      }
     },
     "run-async": {
       "version": "0.1.0"
@@ -3250,9 +3237,6 @@
         "debug": {
           "version": "1.0.2"
         },
-        "isarray": {
-          "version": "0.0.1"
-        },
         "ms": {
           "version": "0.6.2"
         },
@@ -3288,9 +3272,6 @@
         },
         "debug": {
           "version": "0.7.4"
-        },
-        "isarray": {
-          "version": "0.0.1"
         }
       }
     },
@@ -3356,15 +3337,7 @@
       "version": "1.3.16"
     },
     "stream-browserify": {
-      "version": "1.0.0",
-      "dependencies": {
-        "isarray": {
-          "version": "0.0.1"
-        },
-        "readable-stream": {
-          "version": "1.1.14"
-        }
-      }
+      "version": "1.0.0"
     },
     "stream-cache": {
       "version": "0.0.2"
@@ -3400,7 +3373,7 @@
       "version": "1.0.1"
     },
     "strip-json-comments": {
-      "version": "2.0.1"
+      "version": "1.0.4"
     },
     "striptags": {
       "version": "2.1.1"
@@ -3434,6 +3407,12 @@
         "htmlparser2": {
           "version": "3.9.1"
         },
+        "isarray": {
+          "version": "1.0.0"
+        },
+        "readable-stream": {
+          "version": "2.1.5"
+        },
         "resolve-from": {
           "version": "2.0.0"
         },
@@ -3448,8 +3427,14 @@
     "superagent": {
       "version": "2.1.0",
       "dependencies": {
+        "isarray": {
+          "version": "1.0.0"
+        },
         "qs": {
           "version": "6.2.1"
+        },
+        "readable-stream": {
+          "version": "2.1.5"
         }
       }
     },
@@ -3464,9 +3449,6 @@
         },
         "form-data": {
           "version": "1.0.0-rc3"
-        },
-        "isarray": {
-          "version": "0.0.1"
         },
         "qs": {
           "version": "2.3.3"
@@ -3518,7 +3500,15 @@
       "version": "1.13.2"
     },
     "tar-stream": {
-      "version": "1.5.2"
+      "version": "1.5.2",
+      "dependencies": {
+        "isarray": {
+          "version": "1.0.0"
+        },
+        "readable-stream": {
+          "version": "2.1.5"
+        }
+      }
     },
     "text-table": {
       "version": "0.2.0"
@@ -3529,9 +3519,6 @@
     "through2": {
       "version": "0.6.5",
       "dependencies": {
-        "isarray": {
-          "version": "0.0.1"
-        },
         "readable-stream": {
           "version": "1.0.34"
         }
@@ -3794,9 +3781,6 @@
     },
     "which-module": {
       "version": "1.0.0"
-    },
-    "wide-align": {
-      "version": "1.1.0"
     },
     "window-size": {
       "version": "0.1.0"
