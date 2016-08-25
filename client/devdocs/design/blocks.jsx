@@ -97,7 +97,6 @@ export default React.createClass( {
 					<ReaderFullPostHeader />
 					<AuthorCompactProfile />
 					<RelatedPostCardv2 />
-					<PlanPurchaseFeaturesExample />
 				</Collection>
 			</div>
 		);
