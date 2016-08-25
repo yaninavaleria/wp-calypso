@@ -9,6 +9,11 @@ var webpack = require( 'webpack' ),
 	fs = require( 'fs' );
 
 /**
+ * Internal dependencies
+ */
+var config = require( 'config' );
+
+/**
  * This lists modules that must use commonJS `require()`s
  * All modules listed here need to be ES5.
  *
@@ -43,7 +48,7 @@ function getExternals() {
 	return externals;
 }
 
-module.exports = {
+var webpackConfig = {
 	devtool: 'source-map',
 	entry: 'index.js',
 	target: 'node',
@@ -51,7 +56,6 @@ module.exports = {
 		path: path.join( __dirname, 'build' ),
 		filename: 'bundle-' + ( process.env.CALYPSO_ENV || 'development' ) + '.js',
 	},
-	recordsPath: path.join( __dirname, '.webpack-cache', 'server-records.json' ),
 	module: {
 		loaders: [
 			{
@@ -83,7 +87,6 @@ module.exports = {
 		__dirname: true
 	},
 	plugins: [
-		new HardSourceWebpackPlugin( { cacheDirectory: path.join( __dirname, '.webpack-cache', 'server' ) } ),
 		// Require source-map-support at the top, so we get source maps for the bundle
 		new webpack.BannerPlugin( 'require( "source-map-support" ).install();', { raw: true, entryOnly: false } ),
 		new webpack.NormalModuleReplacementPlugin( /^lib\/analytics$/, 'lodash/noop' ), // Depends on BOM
@@ -98,3 +101,10 @@ module.exports = {
 	],
 	externals: getExternals()
 };
+
+if ( config.isEnabled( 'webpack/persistent-caching' ) ) {
+	webpackConfig.recordsPath = path.join( __dirname, '.webpack-cache', 'server-records.json' ),
+	webpackConfig.plugins.push( new HardSourceWebpackPlugin( { cacheDirectory: path.join( __dirname, '.webpack-cache', 'server' ) } ) );
+}
+
+module.exports = webpackConfig;
