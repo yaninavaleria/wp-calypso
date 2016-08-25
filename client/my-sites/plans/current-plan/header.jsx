@@ -28,7 +28,7 @@ export default localize( ( {
 			return null;
 		}
 
-		const hasAutoRenew = currentPlan.auto_renew;
+		const hasAutoRenew = currentPlan.autoRenew;
 		const classes = classNames( 'current-plan__header-purchase-info', {
 			'is-expiring': isExpiring
 		} );
