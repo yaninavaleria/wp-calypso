@@ -3,7 +3,9 @@
  */
 import React from 'react';
 import { noop, throttle } from 'lodash';
-const debug = require( 'debug' )( 'calypso:chart' );
+import debugModule from 'debug';
+
+const debug = debugModule( 'calypso:chart' );
 
 /**
  * Internal dependencies

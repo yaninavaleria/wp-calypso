@@ -3,7 +3,9 @@
  */
 import React from 'react';
 const PureRenderMixin = require( 'react-pure-render/mixin' );
-const debug = require( 'debug' )( 'calypso:module-chart:legend' );
+import debugModule from 'debug';
+
+const debug = debugModule( 'calypso:module-chart:legend' );
 
 /**
  * Internal dependencies
