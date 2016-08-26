@@ -47,12 +47,13 @@ class CurrentPlanHeader extends Component {
 	renderPurchaseInfo() {
 		const {
 			currentPlan,
+			currentPlanSlug,
 			selectedSite,
 			isExpiring,
 			translate
 		} = this.props;
 
-		if ( ! currentPlan ) {
+		if ( ! currentPlan || currentPlanSlug === PLAN_JETPACK_FREE ) {
 			return null;
 		}
 
@@ -62,22 +63,24 @@ class CurrentPlanHeader extends Component {
 		} );
 
 		return (
-			<div className={ classes }>
-				<span className="current-plan__header-expires-in">
-					{ hasAutoRenew
-						? translate( 'Set to Auto Renew on %s.', { args: currentPlan.userFacingExpiryMoment.format( 'LL' ) } )
-						: translate( 'Expires on %s.', { args: currentPlan.userFacingExpiryMoment.format( 'LL' ) } )
+			<Card className="current-plan__header-purchase-info-wrapper" compact>
+				<div className={ classes }>
+					<span className="current-plan__header-expires-in">
+						{ hasAutoRenew
+							? translate( 'Set to Auto Renew on %s.', { args: currentPlan.userFacingExpiryMoment.format( 'LL' ) } )
+							: translate( 'Expires on %s.', { args: currentPlan.userFacingExpiryMoment.format( 'LL' ) } )
+						}
+					</span>
+					{ currentPlan.userIsOwner &&
+					<Button compact href={ `/purchases/${ selectedSite.slug }/${ currentPlan.id }` }>
+						{ hasAutoRenew
+							? translate( 'Manage Payment' )
+							: translate( 'Renew Now' )
+						}
+					</Button>
 					}
-				</span>
-				{ currentPlan.userIsOwner &&
-				<Button compact href={ `/purchases/${ selectedSite.slug }/${ currentPlan.id }` }>
-					{ hasAutoRenew
-						? translate( 'Manage Payment' )
-						: translate( 'Renew Now' )
-					}
-				</Button>
-				}
-			</div>
+				</div>
+			</Card>
 		);
 	}
 
@@ -117,9 +120,7 @@ class CurrentPlanHeader extends Component {
 								{ tagLine }
 							</h2>
 						</div>
-						<Card className="current-plan__header-purchase-info-wrapper" compact>
-							{ this.renderPurchaseInfo() }
-						</Card>
+						{ this.renderPurchaseInfo() }
 					</div>
 				</div>
 
