@@ -20,6 +20,7 @@ import { getPreviewMarkup, getPreviewCustomizations, isPreviewUnsaved } from 'st
 import { setLayoutFocus } from 'state/ui/layout-focus/actions';
 import DesignMenu from 'blocks/design-menu';
 import { getSiteFragment } from 'lib/route/path';
+import { getCurrentLayoutFocus } from 'state/ui/layout-focus/selectors';
 
 const debug = debugFactory( 'calypso:design-preview' );
 
@@ -149,10 +150,10 @@ export default function designPreview( WebPreview ) {
 
 			return (
 				<div>
-					<DesignMenu isVisible={ this.props.showPreview } />
+				<DesignMenu isVisible={ this.props.showPreview } />
 					<WebPreview
 						className={ this.props.className }
-						showPreview={ this.props.showPreview }
+						showPreview={ this.props.currentLayoutFocus === 'preview' }
 						showExternal={ false }
 						showClose={ false }
 						hasSidebar={ true }
@@ -174,6 +175,7 @@ export default function designPreview( WebPreview ) {
 		previewUrl: PropTypes.string,
 		selectedSite: PropTypes.object,
 		selectedSiteId: PropTypes.number,
+		currentLayoutFocus: PropTypes.string,
 		undoCustomization: PropTypes.func.isRequired,
 		fetchPreviewMarkup: PropTypes.func.isRequired,
 		clearCustomizations: PropTypes.func.isRequired,
@@ -183,6 +185,7 @@ export default function designPreview( WebPreview ) {
 	function mapStateToProps( state ) {
 		const selectedSite = getSelectedSite( state );
 		const selectedSiteId = getSelectedSiteId( state );
+		const currentLayoutFocus = getCurrentLayoutFocus( state );
 
 		return {
 			selectedSite,
@@ -192,6 +195,8 @@ export default function designPreview( WebPreview ) {
 			previewMarkup: getPreviewMarkup( state, selectedSiteId ),
 			customizations: getPreviewCustomizations( state, selectedSiteId ),
 			isUnsaved: isPreviewUnsaved( state, selectedSiteId ),
+			currentLayoutFocus,
+			showPreview: currentLayoutFocus === 'preview' || currentLayoutFocus === 'preview-sidebar',
 		};
 	}
 
