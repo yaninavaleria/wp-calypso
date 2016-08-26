@@ -104,7 +104,7 @@ var webpackConfig = {
 
 if ( config.isEnabled( 'webpack/persistent-caching' ) ) {
 	webpackConfig.recordsPath = path.join( __dirname, '.webpack-cache', 'server-records.json' ),
-	webpackConfig.plugins.push( new HardSourceWebpackPlugin( { cacheDirectory: path.join( __dirname, '.webpack-cache', 'server' ) } ) );
+	webpackConfig.plugins.unshift( new HardSourceWebpackPlugin( { cacheDirectory: path.join( __dirname, '.webpack-cache', 'server' ) } ) );
 }
 
 module.exports = webpackConfig;
