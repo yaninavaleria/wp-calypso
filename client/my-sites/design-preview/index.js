@@ -150,10 +150,10 @@ export default function designPreview( WebPreview ) {
 
 			return (
 				<div>
-				<DesignMenu isVisible={ this.props.showPreview } />
+					<DesignMenu isVisible={ this.props.showPreview } />
 					<WebPreview
 						className={ this.props.className }
-						showPreview={ this.props.currentLayoutFocus === 'preview' }
+						showPreview={ this.props.showPreview }
 						showExternal={ false }
 						showClose={ false }
 						hasSidebar={ true }
@@ -175,7 +175,6 @@ export default function designPreview( WebPreview ) {
 		previewUrl: PropTypes.string,
 		selectedSite: PropTypes.object,
 		selectedSiteId: PropTypes.number,
-		currentLayoutFocus: PropTypes.string,
 		undoCustomization: PropTypes.func.isRequired,
 		fetchPreviewMarkup: PropTypes.func.isRequired,
 		clearCustomizations: PropTypes.func.isRequired,
@@ -195,7 +194,6 @@ export default function designPreview( WebPreview ) {
 			previewMarkup: getPreviewMarkup( state, selectedSiteId ),
 			customizations: getPreviewCustomizations( state, selectedSiteId ),
 			isUnsaved: isPreviewUnsaved( state, selectedSiteId ),
-			currentLayoutFocus,
 			showPreview: currentLayoutFocus === 'preview' || currentLayoutFocus === 'preview-sidebar',
 		};
 	}
