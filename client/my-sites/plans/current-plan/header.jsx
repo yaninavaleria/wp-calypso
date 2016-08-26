@@ -1,29 +1,57 @@
 /**
  * External dependencies
  */
-import React from 'react';
 import classNames from 'classnames';
 import { localize } from 'i18n-calypso';
+import React, { Component, PropTypes } from 'react';
 
 /**
  * Internal dependencies
  */
-import PlanIcon from 'components/plans/plan-icon';
-import HappinessSupport from 'components/happiness-support';
 import Button from 'components/button';
 import Card from 'components/card';
+import HappinessSupport from 'components/happiness-support';
+import PlanIcon from 'components/plans/plan-icon';
+import {
+	PLAN_PREMIUM,
+	PLAN_BUSINESS,
+	PLAN_JETPACK_FREE,
+	PLAN_JETPACK_BUSINESS,
+	PLAN_JETPACK_BUSINESS_MONTHLY,
+	PLAN_JETPACK_PREMIUM,
+	PLAN_JETPACK_PREMIUM_MONTHLY,
+	PLAN_PERSONAL
+} from 'lib/plans/constants';
 
-export default localize( ( {
-	selectedSite,
-	title,
-	tagLine,
-	isPlaceholder = false,
-	currentPlanSlug,
-	currentPlan,
-	isExpiring,
-	translate
-} ) => {
-	function getPurchaseInfo() {
+class CurrentPlanHeader extends Component {
+	static propTypes = {
+		selectedSite: PropTypes.object,
+		title: PropTypes.string,
+		tagLine: PropTypes.string,
+		isPlaceholder: PropTypes.bool,
+		currentPlanSlug: React.PropTypes.oneOf( [
+			PLAN_PREMIUM,
+			PLAN_BUSINESS,
+			PLAN_JETPACK_FREE,
+			PLAN_JETPACK_BUSINESS,
+			PLAN_JETPACK_BUSINESS_MONTHLY,
+			PLAN_JETPACK_PREMIUM,
+			PLAN_JETPACK_PREMIUM_MONTHLY,
+			PLAN_PERSONAL
+		] ).isRequired,
+		currentPlan: PropTypes.object,
+		isExpiring: PropTypes.bool,
+		translate: PropTypes.func
+	};
+
+	renderPurchaseInfo() {
+		const {
+			currentPlan,
+			selectedSite,
+			isExpiring,
+			translate
+		} = this.props;
+
 		if ( ! currentPlan ) {
 			return null;
 		}
@@ -53,47 +81,59 @@ export default localize( ( {
 		);
 	}
 
-	return (
-		<div className="current-plan__header">
-			<div className="current-plan__header-item">
-				<div className="current-plan__header-item-content">
-					<div className="current-plan__header-icon">
-						{
-							currentPlanSlug &&
-							<PlanIcon plan={ currentPlanSlug } />
-						}
-					</div>
-					<div className="current-plan__header-copy">
-						<h1 className={
-							classNames( 'current-plan__header-heading', {
-								'is-placeholder': isPlaceholder
-							} )
-						} >
-							{ title }
-						</h1>
+	render() {
+		const {
+			currentPlanSlug,
+			isPlaceholder,
+			title,
+			tagLine,
+			selectedSite
+		} = this.props;
 
-						<h2 className={
-							classNames( 'current-plan__header-text', {
-								'is-placeholder': isPlaceholder
-							} )
-						} >
-							{ tagLine }
-						</h2>
+		return (
+			<div className="current-plan__header">
+				<div className="current-plan__header-item">
+					<div className="current-plan__header-item-content">
+						<div className="current-plan__header-icon">
+							{
+								currentPlanSlug &&
+								<PlanIcon plan={ currentPlanSlug } />
+							}
+						</div>
+						<div className="current-plan__header-copy">
+							<h1 className={
+								classNames( 'current-plan__header-heading', {
+									'is-placeholder': isPlaceholder
+								} )
+							} >
+								{ title }
+							</h1>
+
+							<h2 className={
+								classNames( 'current-plan__header-text', {
+									'is-placeholder': isPlaceholder
+								} )
+							} >
+								{ tagLine }
+							</h2>
+						</div>
+						<Card className="current-plan__header-purchase-info-wrapper" compact>
+							{ this.renderPurchaseInfo() }
+						</Card>
 					</div>
-					<Card className="current-plan__header-purchase-info-wrapper" compact>
-						{ getPurchaseInfo() }
-					</Card>
+				</div>
+
+				<div className="current-plan__header-item">
+					<div className="current-plan__header-item-content">
+						<HappinessSupport
+							isJetpack={ !! selectedSite.jetpack }
+							isPlaceholder={ isPlaceholder }
+						/>
+					</div>
 				</div>
 			</div>
+		);
+	}
+}
 
-			<div className="current-plan__header-item">
-				<div className="current-plan__header-item-content">
-					<HappinessSupport
-						isJetpack={ !! selectedSite.jetpack }
-						isPlaceholder={ isPlaceholder }
-					/>
-				</div>
-			</div>
-		</div>
-	);
-} );
+export default localize( CurrentPlanHeader );
