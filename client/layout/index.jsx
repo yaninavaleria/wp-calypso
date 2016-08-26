@@ -178,7 +178,7 @@ Layout = React.createClass( {
 		if ( config.isEnabled( 'preview-layout' ) && this.props.section.group === 'sites' ) {
 			if ( config.isEnabled( 'paladin' ) ) {
 				return (
-					<DesignPreview showPreview={ this.props.currentLayoutFocus === 'preview' } />
+					<DesignPreview />
 				);
 			}
 			return (
